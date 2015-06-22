@@ -6,3 +6,6 @@ Intermediate/
 
 # Ignore any saved local files
 Saved/
+
+# Ignore local Content mirror (git repo)
+.content/
