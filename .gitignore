@@ -1,0 +1,8 @@
+# ignore compiled version
+Binaries/
+
+# Engine intermediates
+Intermediate/
+
+# Ignore any saved local files
+Saved/

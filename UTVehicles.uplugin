@@ -1,0 +1,23 @@
+{
+	"FileVersion" : 3,
+	
+	"FriendlyName" : "Vehicles",
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"CreatedBy" : "UT Community",
+	"CreatedByURL" : "",
+	"EngineVersion" : "",
+	"Description" : "",
+	"Category" : "UnrealTournament.Expansion",
+	"EnabledByDefault" : true,
+	"CanContainContent" : true,
+	
+	"Modules" :
+	[
+		{
+			"Name" : "UTVehicles",
+			"Type" : "Runtime",
+			"WhitelistPlatforms" : [ "Win32", "Win64", "Linux" ]
+		}
+	]
+}
