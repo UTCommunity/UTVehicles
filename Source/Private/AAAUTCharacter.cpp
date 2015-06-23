@@ -6,6 +6,7 @@
 AUTCharacter::AUTCharacter(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
+	bCanUse = true;
 	VehicleCheckRadius = 150.f;
 }
 

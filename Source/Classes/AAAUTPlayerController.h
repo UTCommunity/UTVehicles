@@ -49,6 +49,7 @@ class AAAAUTPlayerController : public AUTPlayerController
 	*/
 	UFUNCTION()
 	virtual bool PerformedUseAction();
+	virtual bool PerformedUseActionInternal();
 
 	// TODO: Implement triggering Level Blueprint nodes
 	UFUNCTION()

@@ -8,6 +8,7 @@ class AVehicle : public APawn, public IVehicleInterface
 	GENERATED_UCLASS_BODY()
 
 	// Begin AActor Interface.
+	virtual void PreInitializeComponents() override;
 	virtual void DisplayDebug(UCanvas* Canvas, const FDebugDisplayInfo& DebugDisplay, float& YL, float& YPos) override;
 	virtual bool CanBeBaseForCharacter(APawn* APawn) const override;
 	//virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
@@ -15,8 +16,10 @@ class AVehicle : public APawn, public IVehicleInterface
 	virtual void PreReplication(IRepChangedPropertyTracker & ChangedPropertyTracker) override;
 	// End AActor Interface
 
-	UPROPERTY(BlueprintReadWrite, Category = Pawn, Replicated)
+	/** amount of health this Vehicle has */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Replicated)
 	int32 Health;
+	/** normal maximum health of Vehicle - defaults to Default->Health unless explicitly set otherwise */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Pawn)
 	int32 HealthMax;
 

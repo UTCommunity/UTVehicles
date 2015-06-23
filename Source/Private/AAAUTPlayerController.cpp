@@ -7,6 +7,11 @@
 #define AUTPlayerController AAAAUTPlayerController
 #define AUTCharacter AAAAUTCharacter
 
+// TODO: Allow to Enter AVehicle and not just AUTVehicle.
+//       Original code from UT3 also bypasses checks for AVehicle as APlayerController::FindVehicleToDrive is overriden
+
+// TODO: Merge PerformedUseActionInternal with PerformedUseAction
+
 AUTPlayerController::AUTPlayerController(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
@@ -176,46 +181,9 @@ bool AUTPlayerController::PerformedUseAction()
 		}*/
 	}
 
-	// simulate Super.PerformedUseAction...
-	for (int32 i = 0; i < 1; i++)
+	if (PerformedUseActionInternal())
 	{
-		// if the level is paused,
-		if (GetWorldSettings()->Pauser == PlayerState)
-		{
-			if (Role == ROLE_Authority)
-			{
-				// unpause and move on
-				SetPause(false);
-			}
-			return true;
-		}
-
-		if (Char == NULL || !Char->CanUse())
-			return true;
-
-		// below is only on server
-		if (Role < ROLE_Authority)
-		{
-			break;
-		}
-
-		// leave vehicle if currently in one
-		if (Vec != NULL)
-		{
-			return Vec->DriverLeave(false);
-		}
-
-		// try to find a vehicle to drive
-		if (FindVehicleToDrive())
-		{
-			return true;
-		}
-
-		// try to interact with triggers
-		if (TriggerInteracted())
-		{
-			return true;
-		}
+		return true;
 	}
 
 	// TODO: Implement SmartUse for game pads
@@ -227,6 +195,48 @@ bool AUTPlayerController::PerformedUseAction()
 	//}
 
 	return false;
+}
+
+bool AUTPlayerController::PerformedUseActionInternal()
+{
+	// if the level is paused,
+	if (GetWorldSettings()->Pauser == PlayerState)
+	{
+		if (Role == ROLE_Authority)
+		{
+			// unpause and move on
+			SetPause(false);
+		}
+		return true;
+	}
+
+	AUTCharacter* Char = Cast<AUTCharacter>(GetPawn());
+	AVehicle* Vec = Cast<AVehicle>(GetPawn());
+
+	// skip if character isn't able to interact with objects
+	if (Char && !Char->CanUse())
+		return true;
+
+	// below is only on server
+	if (Role < ROLE_Authority)
+	{
+		return false;
+	}
+
+	// leave vehicle if currently in one
+	if (Vec != NULL)
+	{
+		return Vec->DriverLeave(false);
+	}
+
+	// try to find a vehicle to drive
+	if (FindVehicleToDrive())
+	{
+		return true;
+	}
+
+	// try to interact with triggers
+	return TriggerInteracted();
 }
 
 bool AUTPlayerController::FindVehicleToDrive()
@@ -257,7 +267,7 @@ AUTVehicle* AUTPlayerController::CheckVehicleToDrive(bool bEnterVehicle)
 	{
 		FHitResult HitResult;
 		static FName NAME_UseTrace = FName(TEXT("UseTrace"));
-		FCollisionQueryParams TraceParams(NAME_UseTrace, true, this);
+		FCollisionQueryParams TraceParams(NAME_UseTrace, true, Char);
 
 		FVector ViewPoint = Char->GetPawnViewLocation();
 		FRotator ViewRotation = GetControlRotation();
@@ -265,7 +275,7 @@ AUTVehicle* AUTPlayerController::CheckVehicleToDrive(bool bEnterVehicle)
 
 		// see if looking at vehicle
 		FVector ViewDir = CheckDist * ViewRotation.Vector();
-		if (GetWorld()->LineTraceSingle(HitResult, ViewPoint, ViewPoint + ViewDir, COLLISION_TRACE_WEAPON, TraceParams))
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, ViewPoint, ViewPoint + ViewDir, COLLISION_TRACE_WEAPON, TraceParams))
 		{
 			PickedVehicle = CheckPickedVehicle(Cast<AUTVehicle>(HitResult.Actor.Get()), bEnterVehicle);
 			if ((PickedVehicle != NULL) || bJustFoundVehicle)
@@ -277,7 +287,7 @@ AUTVehicle* AUTPlayerController::CheckVehicleToDrive(bool bEnterVehicle)
 		// make sure not just looking above vehicle
 		ViewRotation.Pitch = 0;
 		ViewDir = CheckDist * ViewRotation.Vector();
-		if (GetWorld()->LineTraceSingle(HitResult, ViewPoint, ViewPoint + ViewDir, COLLISION_TRACE_WEAPON, TraceParams))
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, ViewPoint, ViewPoint + ViewDir, COLLISION_TRACE_WEAPON, TraceParams))
 		{
 			PickedVehicle = CheckPickedVehicle(Cast<AUTVehicle>(HitResult.Actor.Get()), bEnterVehicle);
 			if ((PickedVehicle != NULL) || bJustFoundVehicle)
@@ -289,7 +299,7 @@ AUTVehicle* AUTPlayerController::CheckVehicleToDrive(bool bEnterVehicle)
 		// make sure ... ?
 		ViewRotation.Pitch = -5000;
 		ViewDir = CheckDist * ViewRotation.Vector();
-		if (GetWorld()->LineTraceSingle(HitResult, ViewPoint, ViewPoint + ViewDir, COLLISION_TRACE_WEAPON, TraceParams))
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, ViewPoint, ViewPoint + ViewDir, COLLISION_TRACE_WEAPON, TraceParams))
 		{
 			PickedVehicle = CheckPickedVehicle(Cast<AUTVehicle>(HitResult.Actor.Get()), bEnterVehicle);
 			if ((PickedVehicle != NULL) || bJustFoundVehicle)

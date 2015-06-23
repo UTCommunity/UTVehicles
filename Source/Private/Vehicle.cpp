@@ -7,6 +7,19 @@ AVehicle::AVehicle(const FObjectInitializer& ObjectInitializer)
 	AutoPossessPlayer = EAutoReceiveInput::Disabled;
 
 	bAttachDriver = true;
+
+	Health = 100;
+}
+
+void AVehicle::PreInitializeComponents()
+{
+	// important that this comes before Super so mutators can modify it
+	if (HealthMax == 0)
+	{
+		HealthMax = GetDefault<AVehicle>()->Health;
+	}
+
+	Super::PreInitializeComponents();
 }
 
 void AVehicle::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -21,7 +34,7 @@ void AVehicle::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLi
 
 void AVehicle::PreReplication(IRepChangedPropertyTracker & ChangedPropertyTracker)
 {
-	//DOREPLIFETIME_ACTIVE_OVERRIDE(AVehicle, AVehicle, Driver == NULL || !Driver->bHidden);
+	DOREPLIFETIME_ACTIVE_OVERRIDE(AVehicle, Driver, Driver == NULL || !Driver->bHidden);
 }
 
 void AVehicle::OnRep_Driver()
@@ -81,7 +94,7 @@ bool AVehicle::CanEnterVehicle(APawn* P)
 	// Check if player isn't driving a vehicle already
 	// TODO: Implement Driver to be non-UTCharacter type
 	AUTCharacter* Char = Cast<AUTCharacter>(P);
-	if (Char != NULL && (!bAttachDriver || !Char->bIsCrouched) && Char->DrivenVehicle == NULL && P->IsA(AVehicle::StaticClass()) && AnySeatAvailable())
+	if (Char != NULL && (!bAttachDriver || !Char->bIsCrouched) && Char->DrivenVehicle == NULL && !P->IsA(AVehicle::StaticClass()) && AnySeatAvailable())
 	{
 		return true; // FIXME: Check for Is-Player flag; UC: P->Controller != NULL && P->Controller->bIsPlayer;
 	}
