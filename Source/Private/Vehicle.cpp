@@ -1,11 +1,19 @@
 #include "UTVehiclesPrivatePCH.h"
 #include "Vehicle.h"
+#include "AAAUTCharacter.h"
+#include "AAAUTGameMode.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogUTCharacter, Log, All);
+
+#define AUTCharacter AAAAUTCharacter
+#define AUTGameMode AAAAUTGameMode
 
 AVehicle::AVehicle(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
 	AutoPossessPlayer = EAutoReceiveInput::Disabled;
 
+	MomentumMult = 1.0f;
 	bAttachDriver = true;
 
 	Health = 100;
@@ -83,6 +91,60 @@ void AVehicle::SetInputs(float InForward, float InStrafe, float InUp)
 	Rise = InUp;
 }
 
+void AVehicle::PossessedBy(AController* NewController) //  TODO: Add VehicleTransition ==> PossessedBy(AController* NewController, bool bVehicleTransition)
+{
+	Super::PossessedBy(NewController);
+
+	EntryAnnouncement(NewController);
+	NetPriority = 3.0f;
+	NetUpdateFrequency = 100.0f;
+
+	// TODO: Implement support for AI
+	//ThrottleTime = WorldInfo.TimeSeconds;
+	//OnlySteeringStartTime = WorldInfo.TimeSeconds;
+}
+
+void AVehicle::UnPossessed()
+{
+	// restore original netpriority changed when possessing
+	NetPriority = GetDefault<AVehicle>()->NetPriority;;
+	NetUpdateFrequency = 8;
+	ForceNetUpdate();
+
+	Super::UnPossessed();
+}
+
+void AVehicle::EntryAnnouncement(AController* NewController)
+{
+}
+
+void AVehicle::AttachDriver_Implementation(APawn* P)
+{
+	if (!bAttachDriver)
+		return;
+
+	P->SetActorEnableCollision(false);
+	P->DetachRootComponentFromParent(true); // UC: P.SetBase(none);
+	//P.SetHardAttach(true); // TODO: FIXME: add hard attach
+	//P.SetPhysics(PHYS_None); // TODO: FIXME: Set Physics state
+
+	//if ((P.Mesh != None) && (Mesh != None)) // TODO: FIXME: Set shadow parent
+	//	P.Mesh.SetShadowParent(Mesh);
+
+	if (!bDriverIsVisible)
+	{
+		P->SetActorHiddenInGame(true);
+		P->SetActorLocation(GetActorLocation());
+	}
+	P->AttachRootComponentToActor(this); // UC: P.SetBase(self);
+	// need to set PHYS_None again, because SetBase() changes physics to PHYS_Falling
+	//P.SetPhysics(PHYS_None); // TODO: FIXME: Set Physics state
+}
+
+void AVehicle::DetachDriver_Implementation(APawn* NewDriver)
+{
+}
+
 bool AVehicle::CanEnterVehicle(APawn* P)
 {
 	// SafeGuard checks
@@ -121,6 +183,7 @@ bool AVehicle::DriverEnter_Implementation(APawn* P)
 {
 	if (Role != ROLE_Authority)
 	{
+		UE_LOG(UTVehicles, Warning, TEXT("%s::DriverEnter() called on client"), *GetName());
 		return false;
 	}
 
@@ -156,7 +219,7 @@ bool AVehicle::DriverEnter_Implementation(APawn* P)
 			C->Possess(this); // TODO: Add VehicleTransition ==> C->Possess(this, true);
 
 			// TODO: Implement switching PlayerController state
-			/*if (PlayerController(C) != None)
+			/*if (PlayerController(C) != None && !C.IsChildState(C.GetStateName(), LandMovementState))
 			{
 				PlayerController(C).GotoState(LandMovementState);
 			}*/
@@ -179,6 +242,15 @@ bool AVehicle::DriverLeave_Implementation(bool bForceLeave)
 		return false;
 	}
 
+	if (!bForceLeave)
+	{
+		AUTGameMode* Game = GetWorld()->GetAuthGameMode<AUTGameMode>();
+		if (Game && !Game->CanLeaveVehicle(this, Driver))
+		{
+			return false;
+		}
+	}
+
 	// Do nothing if we're not being driven
 	if (Controller == NULL)
 	{
@@ -187,28 +259,26 @@ bool AVehicle::DriverLeave_Implementation(bool bForceLeave)
 
 	// Before we can exit, we need to find a place to put the driver.
 	// Iterate over array of possible exit locations.
-	/*if (Driver != None)
+	if (Driver != NULL)
 	{
-		Driver.SetHardAttach(false);
-		Driver.bCollideWorld = true;
-		Driver.SetCollision(true, true);
+		//Driver.SetHardAttach(false); // FIXME: add hard attach
+		Driver->SetActorEnableCollision(true);
 
 		if (!PlaceExitingDriver())
 		{
 			if (!bForceLeave)
 			{
 				// If we could not find a place to put the driver, leave driver inside as before.
-				Driver.SetHardAttach(true);
-				Driver.bCollideWorld = false;
-				Driver.SetCollision(false, false);
+				//Driver.SetHardAttach(true); // FIXME: add hard attach
+				Driver->SetActorEnableCollision(false);
 				return false;
 			}
 			else
 			{
-				Driver.SetLocation(GetTargetLocation());
+				Driver->SetActorLocation(GetTargetLocation());
 			}
 		}
-	}*/
+	}
 
 	FRotator ExitRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
 	SetDriving(false);
@@ -266,11 +336,126 @@ void AVehicle::DriverLeft()
 	SetDriving(false);
 }
 
-void AVehicle::SetDriving_Implementation(bool b)
+bool AVehicle::PlaceExitingDriver(APawn* ExitingDriver)
 {
-	if (bDriving != b)
+	if (ExitingDriver == NULL)
+		ExitingDriver = Driver;
+
+	if (ExitingDriver == NULL)
+		return false;
+
+	FVector Extent = ExitingDriver->GetSimpleCollisionRadius() * FVector(1.f);
+	Extent.Z = ExitingDriver->GetSimpleCollisionHalfHeight() * 2.f;
+	FVector ZOffset = Extent.Z * FVector(0.f, 0.f, 1.f);
+
+	if (ExitPositions.Num() > 0)
 	{
-		bDriving = b;
+		// specific exit positions specified
+		FVector HitLocation;
+		FVector HitNormal;
+		for (auto ExitPosition : ExitPositions)
+		{
+			if (ExitPositions[0].Z != 0)
+				ZOffset = FVector(0.f, 0.f, ExitPosition.Z);
+			else
+				ZOffset = ExitingDriver->GetSimpleCollisionHalfHeight() * 2.f * FVector(0.f, 0.f, 2);
+
+			FVector tryPlace = GetActorLocation() + GetActorRotation().RotateVector(ExitPosition - ZOffset) + ZOffset;
+
+			// First, do a line check (stops us passing through things on exit).
+			if (Trace(HitLocation, HitNormal, tryPlace, GetActorLocation() + ZOffset, false, Extent) != NULL)
+				continue;
+
+			// Then see if we can place the player there.
+			if (!ExitingDriver->SetActorLocation(tryPlace))
+				continue;
+
+			return true;
+		}
+	}
+	else
+	{
+		return FindAutoExit(ExitingDriver);
+	}
+
+	return false;
+}
+
+bool AVehicle::FindAutoExit(APawn* ExitingDriver)
+{
+	FVector FacingDir = GetActorRotation().Vector();
+	FVector CrossProduct = FVector::CrossProduct(FacingDir, FVector(0.f, 0.f, 1.f)).GetSafeNormal();
+
+	if (ExitRadius == 0)
+	{
+		ExitRadius = GetSimpleCollisionRadius();
+		if (AUTCharacter* Char = Cast<AUTCharacter>(ExitingDriver))
+		{
+			ExitRadius += Char->VehicleCheckRadius;
+		}
+	}
+	
+	float PlaceDist = ExitRadius + ExitingDriver->GetSimpleCollisionRadius();
+	FVector ExitPos = GetTargetLocation() + ExitOffset;
+
+	return TryExitPos(ExitingDriver, ExitPos + PlaceDist * CrossProduct, false)
+		|| TryExitPos(ExitingDriver, ExitPos - PlaceDist * CrossProduct, false)
+		|| TryExitPos(ExitingDriver, ExitPos - PlaceDist * FacingDir, false)
+		|| TryExitPos(ExitingDriver, ExitPos + PlaceDist * FacingDir, false);
+}
+
+bool AVehicle::TryExitPos(APawn* ExitingDriver, FVector ExitPos, bool bMustFindGround)
+{
+	if (ExitingDriver == NULL)
+	{
+		return false;
+	}
+
+	FVector Slice = ExitingDriver->GetSimpleCollisionRadius() * FVector(1.f);
+	Slice.Z = 2;
+
+	// First, do a line check (stops us passing through things on exit).
+	FVector HitLocation;
+	FVector HitNormal;
+	FVector StartLocation = GetTargetLocation();
+	if (Trace(HitLocation, HitNormal, ExitPos, StartLocation, false, Slice) != NULL)
+	{
+		return false;
+	}
+
+	// Now trace down, to find floor
+	float CollisionHeight = ExitingDriver->GetSimpleCollisionHalfHeight() * 2.f;
+	AActor* HitActor = Trace(HitLocation, HitNormal, ExitPos - (CollisionHeight * FVector(0.f, 0.f, 5.f)), ExitPos, true, Slice);
+
+	if (HitActor == NULL)
+	{
+		if (bMustFindGround)
+		{
+			return false;
+		}
+		HitLocation = ExitPos;
+	}
+
+	ACharacter* Char = Cast<ACharacter>(ExitingDriver);
+	float MaxStepHeight = (Char && Char->GetCharacterMovement() ? Char->GetCharacterMovement()->MaxStepHeight : 0.f);
+	FVector NewActorPos = HitLocation + (CollisionHeight + MaxStepHeight) * FVector(0.f, 0.f, 1.f);
+
+	// Check this wont overlap this vehicle.
+	if (PointCheckComponent(GetMesh(), NewActorPos, ExitingDriver->GetSimpleCollisionCylinderExtent()))
+	{
+		return false;
+	}
+
+	// try placing driver on floor
+	return ExitingDriver->SetActorLocation(NewActorPos);
+}
+
+
+void AVehicle::SetDriving_Implementation(bool bNewDriving)
+{
+	if (bDriving != bNewDriving)
+	{
+		bDriving = bNewDriving;
 		DrivingStatusChanged();
 	}
 }
@@ -312,3 +497,46 @@ float AVehicle::DriverTakeRadialDamage(float Damage, struct FRadialDamageEvent c
 
 	return 0.f;
 }
+
+// TODO: Check if needed
+void AVehicle::StartFire(uint8 FireModeNum)
+{
+	UE_LOG(LogUTCharacter, Verbose, TEXT("StartFire %d"), FireModeNum);
+
+	if (!IsLocallyControlled())
+	{
+		UE_LOG(LogUTCharacter, Warning, TEXT("StartFire() can only be called on the owning client"));
+	}
+	else if (Weapon != NULL)
+	{
+		Weapon->StartFire(FireModeNum);
+	}
+}
+
+// TODO: Check if needed
+void AVehicle::StopFire(uint8 FireModeNum)
+{
+	if (!IsLocallyControlled())
+	{
+		UE_LOG(LogUTCharacter, Warning, TEXT("StopFire() can only be called on the owning client"));
+	}
+	else if (Weapon != NULL)
+	{
+		Weapon->StopFire(FireModeNum);
+	}
+}
+
+// TODO: Check if needed
+void AVehicle::StopFiring()
+{
+	for (int32 i = 0; i < PendingFire.Num(); i++)
+	{
+		if (PendingFire[i])
+		{
+			StopFire(i);
+		}
+	}
+}
+
+#undef AUTCharacter
+#undef AUTGameMode
