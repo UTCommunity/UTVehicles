@@ -1,10 +1,10 @@
 #pragma once
 
-#include "UTGameMode.h"
+#include "AAAUTGameMode.h"
 #include "AAATempVehicleGameMode.generated.h"
 
 UCLASS()
-class AAAATempVehicleGameMode : public AUTGameMode
+class AAAATempVehicleGameMode : public AAAAUTGameMode
 {
 	GENERATED_UCLASS_BODY()
 };

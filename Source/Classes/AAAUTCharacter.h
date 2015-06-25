@@ -12,6 +12,10 @@ class AAAAUTCharacter : public AUTCharacter
 	UPROPERTY(EditAnywhere)
 	float VehicleCheckRadius;
 
+	// TODO: Implement once methods are virtual
+	//void StartDriving(APawn* Vehicle) override;
+	//void StopDriving(APawn* Vehicle) override;
+
 	// Note: Insert after ServerUseCarriedObject()
 	// ...
 
