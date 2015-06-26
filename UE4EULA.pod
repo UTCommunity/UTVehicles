@@ -1,0 +1,645 @@
+=begin html
+
+	<h4 style="text-align:center;">
+		Unreal&reg; Engine End User License Agreement
+	</h4>
+
+	<p style="margin-bottom:10px;text-align:center;">
+		To see the EULA change log <a href="//unrealengine.com/eula-change-log">click here</a>.
+	</p>
+
+	<p>
+		Please read this Agreement carefully.&nbsp; It is a legal document that explains your rights and obligations related to your use of the Unreal&reg; Engine and related content.&nbsp; By downloading or using this software or any related content, you are agreeing to be bound by the terms of this Agreement.&nbsp; If you do not or cannot agree to the terms of this Agreement, please do not download or use this software or any related content.&nbsp;
+	</p>
+
+	<p>
+		Certain words or phrases are defined to have certain meanings when used in this Agreement.&nbsp; Those words and phrases are defined below in Section 24.
+	</p>
+
+	<p>
+		If your primary residence (or primary place of business, if you are a legal entity like a corporation or an academic institution) is in the United States of America, your agreement is with Epic Games, Inc.&nbsp; If it is not in the United States of America, your agreement is with Epic Games International S.&agrave; r.l., acting through its Swiss branch.&nbsp;
+	</p>
+
+	<p>
+		If you are separately licensed by Epic under a Custom License, certain terms of this Agreement do not apply to your Custom Products.&nbsp; Those terms are described below in Section 25.
+	</p>
+
+	<p>
+		<strong>1. License Grant </strong>
+	</p>
+
+	<p>
+		Epic grants you a non-exclusive, non-transferable, non-sublicensable (except as described in this Agreement) license for a single User to use, reproduce, display, perform, and modify the Licensed Technology for any lawful purpose (the &ldquo;<strong>License</strong>&rdquo;).&nbsp; However, the rights that Epic grants you under the License are subject to the terms of this Agreement, and you may only make use of the License if you comply with all applicable terms.
+	</p>
+
+	<p>
+		The License becomes effective on the date you accept this Agreement or download the Engine Code or any Content.&nbsp; The License does not grant you any title or ownership in the Licensed Technology.&nbsp;
+	</p>
+
+	<p>
+		<strong><em>Allowed forms of Distribution and Sublicensing</em></strong>
+	</p>
+
+	<p>
+		You may only Distribute the Licensed Technology as follows:
+	</p>
+
+	<p style="margin-left:.75in;">
+		a.&nbsp;&nbsp; <u>Distribution to end users</u> - You may Distribute the Licensed Technology incorporated in object code format only as an inseparable part of a Product to end users who are subject to an end user license agreement which explicitly disclaims any representations, warranties, conditions, and liabilities related to the Licensed Technology.&nbsp; The Product may not contain any Engine Tools or any Marketplace Content Distributed in uncooked source format.
+	</p>
+
+	<p style="margin-left:.75in;">
+		b.&nbsp;&nbsp; <u>Distribution to other licensees</u> - You may Distribute Engine Code (including as modified by you under the License) in Source Code or object code format, or any Content, to an Engine Licensee who has rights under its license to the same Version of the Engine Code or Content that you are Distributing. &nbsp;
+	</p>
+
+	<p style="margin-left:.75in;">
+		Any public Distribution (i.e., intended for Engine Licensees generally) which includes Engine Tools must take place either through the Marketplace (<em>e.g.</em>, for distributing a Product&rsquo;s modding tool or editor to end users) or through a fork of Epic&rsquo;s GitHub UnrealEngine Network (<em>e.g.</em>, for distributing source code).<br />
+		<br />
+		You also may Distribute Content to an Engine Licensee who is your employee or your contractor regardless of whether they have rights under their license to the same Content, but only to permit that Engine Licensee to utilize that Content in good faith to develop a Product on your behalf for Distribution by you under the License, and not for the purpose of Content pooling or any other Distribution or sublicensing of Content that is not permitted under this Agreement.&nbsp; Recipients of such a Distribution have a limited license to use, reproduce, display, perform, and modify that Content to develop your Product as outlined above, and for no other purpose.
+	</p>
+
+	<p style="margin-left:.75in;">
+		c.&nbsp;&nbsp; <u>Distribution and sublicensing of Examples</u> - You may Distribute or sublicense Examples (including as modified by you under the License) in Source Code or object code format to any third party.&nbsp; However, the rights in this Section 1(c) do not expand or modify your limited Distribution and sublicensing rights for Engine Code and Content (including as modified by you under the License) that are not Examples.
+	</p>
+
+	<p style="margin-left:.75in;">
+		d.&nbsp;&nbsp; <u>Distribution of Non-C++ Programming Language Integration</u> - You may Distribute an integration of a programming language other than C++ for the Licensed Technology, but if you do, the integration must be Distributed free of charge, permit Distribution in a Product free of charge on all platforms, and be available in source code form (including, but not limited to, any compiler, linker, toolchain, or runtime) to all Engine Licensees.
+	</p>
+
+	<p>
+		You are permitted to post snippets of Engine Code, up to 30 lines of code in length, online in public forums for the sole purpose of discussing the content of the snippet and not for the purpose of enabling non-Engine Licensees to use or modify any Engine Code, or to aggregate, recombine, or reconstruct any larger portion of the Engine Code.
+	</p>
+
+	<p>
+		You may not sublicense the Licensed Technology in Source Code format.&nbsp; You may not sublicense the Licensed Technology in object code format, or any Content, except to grant end users the ability to use, or to permit your publishers and distributors to market and Distribute, a Product that you Distribute as permitted in Section 1(a) above.&nbsp; This paragraph does not limit your rights to Distribute and sublicense Examples.
+	</p>
+
+	<p>
+		When you generate revenue from a Product or Distribute it to end users, you must provide Epic with advance notification at <a href="//unrealengine.com/release">unrealengine.com/release</a>, as early as reasonably possible, including the name of the Product, the format of distribution, unique Product id (where applicable), and the distribution channel(s).
+	</p>
+
+	<p>
+		<strong><em>Other Restrictions</em></strong>
+	</p>
+
+	<p>
+		<em>UE-Only Content</em>
+	</p>
+
+	<p>
+		For UE-Only Content, you may exercise your rights under the License only if and to the extent that the UE-Only Content is utilized in combination with the Engine Code.&nbsp; For example, you may not develop or Distribute a Product that consists of or contains UE-Only Content but does not contain and require the Engine Code (including as modified by you under the License) for its use. &nbsp;The UE-Only Content will be subject to all of the terms of this Agreement that apply to Content, as well as the additional limitations described in this paragraph. &nbsp;All references in this paragraph to UE-Only Content include modified versions thereof made by you under the License.
+	</p>
+
+	<p>
+		<em>Non-Compatible Licenses</em>
+	</p>
+
+	<p>
+		You may not combine, Distribute, or otherwise use the Licensed Technology with any code or other content which is covered by a license that would directly or indirectly require that all or part of the Licensed Technology be governed under any terms other than those of this Agreement (&ldquo;<strong>Non-Compatible License</strong>&rdquo;).&nbsp; Code or content under the following licenses, for example, are prohibited:&nbsp; GNU General Public License (GPL), Lesser GPL (LGPL) (unless you are merely dynamically linking a shared library), or Creative Commons Attribution-ShareAlike License.&nbsp; Code or content under the following licenses, for example, are allowed:&nbsp; BSD License, MIT License, Microsoft Public License, or Apache License.&nbsp; You may not sublicense the Licensed Technology under a Non-Compatible License.
+	</p>
+
+	<p>
+		<em>General Restrictions</em>
+	</p>
+
+	<p>
+		You may not engage in any activity with respect to the Licensed Technology, including as incorporated into a Product, (1) for any gambling-related activities or Products (as defined by law in the jurisdiction of use); (2) for operation of nuclear facilities, aircraft navigation, aircraft communication systems or air traffic control machines, or for military use in connection with live combat; (3) in violation of any applicable law or regulation; (4) in which the Licensed Technology is rented or leased; (5) that misappropriates any of Epic&rsquo;s other products or services; (6) in support of a claim by you or any third party that the Licensed Technology infringes a patent. &nbsp;You also may not sell or grant a security interest in the Licensed Technology.
+	</p>
+
+	<p>
+		<strong><em>Limited License for Unreal Tournament Content</em></strong>
+	</p>
+
+	<p>
+		Epic grants you a non-exclusive, non-transferable, non-sublicensable license, during the Unreal Tournament Project, for a single User to use, reproduce, and modify the Unreal Tournament Content for the sole purposes of creating Unreal Tournament Contributions for the Unreal Tournament Project and creating Unreal Tournament UGC (the &ldquo;<strong>Unreal Tournament License</strong>&rdquo;).&nbsp; You may not Distribute or sublicense to any person other than Epic, or include in any product, any Unreal Tournament Content.&nbsp; The Unreal Tournament License does not grant you any title, ownership rights, or other intellectual property rights in any Unreal Tournament Content.&nbsp; You agree to retain and reproduce in all copies of the Unreal Tournament Content the copyright, trademark, and other proprietary notices and disclaimers of Epic as they appear in the Unreal Tournament Content.&nbsp; Upon the completion of the Unreal Tournament Project or termination of the Epic Licenses under Section 16, or upon earlier written notice from Epic if you materially breach the terms of the Unreal Tournament License, you must destroy all copies of the Unreal Tournament Content.&nbsp; All references in this paragraph to the Unreal Tournament Content include modified versions thereof made by you under the Unreal Tournament License.
+	</p>
+
+	<p>
+		Any Distribution of Unreal Tournament UGC must take place through the Marketplace, Epic&rsquo;s GitHub UnrealEngine Network, or other Epic services, unless such Distribution is solely for the purpose of legitimate development of such Unreal Tournament UGC, and then only to Engine Licensees, or legitimate testing of such Unreal Tournament UGC, and then only to Engine Licensees or individuals who have accepted the latest Unreal Tournament EULA.
+	</p>
+
+	<p>
+		<strong>2. User License</strong>
+	</p>
+
+	<p>
+		The Licensed Technology is licensed to you for use by a single User.&nbsp; The User may store the Licensed Technology on any of the User&rsquo;s computers, but the Licensed Technology cannot be shared with others (including any other employees or agents) except through a permitted Distribution as described above.&nbsp;
+	</p>
+
+	<p>
+		In order to access and download the Engine Code and Content, you must set up an Account.&nbsp; You may not share or allow others to use your Account.&nbsp; You are responsible for the security of your Account.&nbsp; For questions regarding your Account, please go to unrealengine.com/contact.
+	</p>
+
+	<p>
+		Under the License, the User may use the Licensed Technology for as long as you comply with this Agreement.&nbsp; If you are a legal entity, references to &ldquo;you&rdquo; in this agreement also apply to the User in all cases.&nbsp; You are responsible for the User&rsquo;s compliance with this Agreement.&nbsp;
+	</p>
+
+	<p>
+		If you are an Academic Institution, the limitation to use by a single User does not apply with respect to the Licensed Technology.&nbsp; Instead, you may store the Licensed Technology on any of your computers, and you may allow all users of those computers to use the Licensed Technology (excluding any Marketplace Content) under the License.&nbsp; However, those users are not authorized under your License to Distribute or sublicense the Licensed Technology (including as incorporated in a Product) unless they obtain a License of their own.
+	</p>
+
+	<p>
+		<strong >3.&nbsp;&nbsp; New Versions and Content</strong>
+	</p>
+
+	<p>
+		During the term of your License, you will be entitled to access future Versions of the Engine Code and new Content that Epic chooses to make available to you.&nbsp; Epic does not have any obligation to make new Versions of the Engine Code or new Content available.&nbsp; Nor does Epic have any obligation to continue to make available for access or download any or all Versions of the Engine Code or Content.&nbsp; However, any Versions of the Engine Code and Content that Epic has made available to you, and for which you have accepted any applicable amendment to this Agreement as described in Section 21, are considered part of the Licensed Technology and may be used under the License (as amended by that amendment).
+	</p>
+
+	<p>
+		Epic may also make Marketplace Content available to you for a fee.&nbsp; Your License to Marketplace Content is subject to your payment of the associated fee.&nbsp; When you pay the fee to obtain that Marketplace Content, you are purchasing from Epic the right to have your License include that Marketplace Content.&nbsp; Regardless of any references Epic may make outside this Agreement to purchasing or selling Marketplace Content, Marketplace Content is licensed, not sold, to you under the License.&nbsp;
+	</p>
+
+	<p>
+		When you provide payment information to Epic or its authorized processor, you represent that you are an authorized user of the payment card, PIN, key, account, or other payment method specified by you, and you authorize Epic to charge such payment method for the full amount of the transaction.
+	</p>
+
+	<p>
+		<strong>4.&nbsp;&nbsp; Royalty&nbsp;</strong>
+	</p>
+
+	<p>
+		You agree to pay Epic a royalty equal to 5% of all worldwide gross revenue actually attributable to each Product, regardless of whether that revenue is received by you or any other person or legal entity, as follows:
+	</p>
+
+	<ol style="list-style-type:lower-alpha;margin-bottom:14px;">
+		<li>
+			Gross revenue resulting from any and all sales of a Product to end users through any and all media, including but not limited to digital and retail;
+		</li>
+		<li value="2">
+			Gross revenue resulting from any and all in-app purchases, downloadable content, microtransactions, subscriptions, sale, transfer, or exchange of content created by end users for use with a Product, or redemption of virtual currency, either within a Product or made externally but which directly affect the operation of the Product;
+		</li>
+		<li value="3">
+			Gross revenue from any Kickstarter or other crowdfunding campaign which is directly associated with Product access or in-Product benefit (<em>e.g.</em>, in a multi-tiered campaign, if an amount is established in an early tier solely for Product access, your royalty obligation will apply to that amount for each backer with the same access, but not on additional amounts in higher tiers based on ancillary benefits);
+		</li>
+		<li value="4">
+			Your revenue from in-app advertising and affiliate programs;
+		</li>
+		<li value="5">
+			Revenue from advance payments for a Product (from a publisher or otherwise); and
+		</li>
+		<li value="6">
+			Revenue in any other form actually attributable to a Product (unless excluded below).
+		</li>
+	</ol>
+
+	<p>
+		However, no royalty is owed on the following forms of revenue:
+	</p>
+
+	<ol style="margin-bottom:14px;">
+		<li>
+			The first $3,000.00 in gross revenue for each Product per calendar quarter;
+		</li>
+		<li value="2">
+			Consulting fees or work-for-hire fees which are non-recoupable for services performed using the Licensed Technology (<em>e.g.</em>, an architect-created walkthrough simulation or a contractor-developed in-house training simulator);
+		</li>
+		<li value="3">
+			Revenue from a Product which solely relies on the Licensed Technology for production of non-interactive linear media (<em>.e.g.</em>, broadcast or streamed video files, cartoons, or movies) and which is Distributed in a form that does not contain the Licensed Technology or, in order to deliver, rely on servers running the Licensed Technology;
+		</li>
+		<li value="4">
+			Revenue from a Product which is only Distributed to Engine Licensees (such as through the Marketplace);
+		</li>
+		<li value="5">
+			Revenue from ancillary products which are not software and which do not contain embedded information (such as QR codes) which affects the operation of the Product (<em>e.g.</em>, comic books, soundtracks, apparel);
+		</li>
+		<li value="6">
+			Financial winnings generated by awards for the Product;
+		</li>
+		<li value="7">
+			Revenue from donations for a Product which are not tied to Product access or in-Product benefits; and
+		</li>
+		<li value="8">
+			Revenue from interactive amusement park rides or coin-operated arcade games which use the Licensed Technology.
+		</li>
+	</ol>
+
+	<p>
+		The royalty is based on gross revenue from end users, regardless of whether you sell your Product to end users directly, self-publish via the App Store or any similar store, or work with a publisher. &nbsp;The following simplified example illustrates the application of the royalty to gross sales: &nbsp;if your Product earns $10 on the App Store, Apple may pay you $7 (having deducted&nbsp;30% as a distribution fee), but your royalty to Epic would still be 5% of $10 (or $0.50).
+	</p>
+
+	<p>
+		Royalties that you pay on an advance payment of revenue for a Product that is recoupable by the payer, such as a publisher, may be credited against future royalty payments that you incur under this Agreement for that Product.
+	</p>
+
+	<p>
+		Within 45 days after the end of each calendar quarter in which a Product earns revenue outside of the above-listed royalty exclusions, you must pay to Epic the full amount of the royalty due for that quarter and send Epic a royalty report on a per Product basis.&nbsp; Detailed information on royalty reporting and payment can be found at <a href="//unrealengine.com/release">unrealengine.com/release</a>.
+	</p>
+
+	<p>
+		The royalty will be payable under this Agreement with respect to each Product for as long as any Engine Code or Assets (including as modified by you under the License) incorporated in or used to make the Product are protected under copyright or other applicable intellectual property law.
+	</p>
+
+	<p>
+		<strong>5.&nbsp;&nbsp; Payments</strong>
+	</p>
+
+	<p>
+		Epic reserves the right to charge a 2% late fee, per calendar quarter (compounding), for any amounts unpaid after the required due date.
+	</p>
+
+	<p>
+		You are responsible for all taxes on all payments required to be made by you under this Agreement (other than taxes that Epic is obligated to pay on its income, which are Epic&rsquo;s responsibility).&nbsp; If you are required by a government agency to reduce your payment to Epic for any reason, you are required to provide sufficient documentation to Epic supporting the withholding.&nbsp; For questions about withholding taxes or taxes in general, please go to <a href="//unrealengine.com/contact">unrealengine.com/contact</a>.
+	</p>
+
+	<p>
+		<strong>6.&nbsp;&nbsp; Records and Audits&nbsp; </strong>
+	</p>
+
+	<p>
+		You agree to keep accurate books and records related to your development, manufacture, Distribution, and sale of Products and related revenue.&nbsp; Epic may conduct reasonable audits of those books and records.&nbsp; Audits will be conducted during business hours on reasonable prior notice to you.&nbsp; Epic will bear the costs of audits unless the results show a shortfall in payments in excess of 5% during the period audited, in which case you will be responsible for the cost of the audit.
+	</p>
+
+	<p>
+		<strong>7.&nbsp;&nbsp; Support&nbsp; </strong>
+	</p>
+
+	<p>
+		Epic does not have any support obligations with respect to the Licensed Technology under this Agreement.&nbsp; Support resources may be obtained at <a href="//unrealengine.com/faq">unrealengine.com/faq</a>.
+	</p>
+
+	<p>
+		<strong>8.&nbsp;&nbsp; Feedback and Contributions&nbsp; </strong>
+	</p>
+
+	<p>
+		If you provide Epic with any Feedback, Epic is free to use the Feedback however it chooses.&nbsp; If you make any Contribution available to Epic, you hereby assign to Epic all right, title, and interest (including all copyright, patent, and other intellectual property rights) in that Contribution for all current and future methods and forms of exploitation in any country.&nbsp; If any of those rights are not effectively assigned under applicable law, you hereby grant Epic a non-exclusive, fully-paid, irrevocable, transferable, sublicensable license to reproduce, distribute, publicly perform, publicly display, make, use, have made, sell, offer to sell, import, modify and make derivative works based on, and otherwise exploit that Contribution for all current and future methods and forms of exploitation in any country.&nbsp; If any of those rights may not be assigned or licensed under applicable law (such as moral and other personal rights), you hereby waive and agree not to assert all of those rights.&nbsp; However, you may continue to freely use any Feedback that you provide to Epic, and you may continue to use, in any manner consistent with the License, any Contribution (including Unreal Tournament Code Contributions) that you make available to Epic.&nbsp; For Unreal Tournament Content Contributions, you may continue to use those Contributions only in a manner consistent with the Unreal Tournament License.
+	</p>
+
+	<p>
+		You understand and agree that Epic is not required to make any use of any Feedback or Contribution that you provide.&nbsp; You agree that if Epic makes use of your Feedback or Contribution, Epic is not required to credit or compensate you for your contribution.
+	</p>
+
+	<p>
+		You represent and warrant that you have sufficient rights in any Feedback or Contribution that you provide to Epic to grant Epic and other affected parties the rights described above.&nbsp; This includes but is not limited to intellectual property rights and other proprietary or personal rights.
+	</p>
+
+	<p>
+		<strong>9.&nbsp;&nbsp; Third Party Software&nbsp; </strong>
+	</p>
+
+	<p>
+		The Engine Code includes Third Party Software components.&nbsp; If Third Party Software has separate software license or attribution requirements, the license terms or other attribution requirements for Third Party Software components can be found in the installation directory for each engine version (under the /Engine/Source/ThirdParty/Licenses sub-folder). &nbsp;By entering into this Agreement and using Third Party Software, you are accepting the terms of those licenses.&nbsp; In this case, the Third Party Software terms will govern your use of the Third Party Software, and if there is inconsistency, those terms will take precedence over the terms of the License for the Third Party Software.&nbsp; You agree that the owners of the Third Party Software are intended third party beneficiaries to this Agreement in relation to your uses of Third Party Software.&nbsp;
+	</p>
+
+	<p>
+		<strong>10. Ownership&nbsp; </strong>
+	</p>
+
+	<p>
+		Epic or its licensors own all title, ownership rights, and intellectual property rights in the Engine Code and Content. &nbsp;You own all rights in the Products you develop under the License, other than the Engine Code and Content, Third Party Software, and any Contributions.&nbsp; All rights granted to you under this Agreement are granted by express license only and not by sale, and all of those rights are limited by the terms of this Agreement.&nbsp; No license or other rights will be created hereunder by implication, estoppel, or otherwise.&nbsp; Any attempted sublicense under this Agreement that is not consistent with the terms of this Agreement will be null and void.
+	</p>
+
+	<p>
+		<strong>11. Proprietary Notices and Attribution </strong>
+	</p>
+
+	<p>
+		You agree to retain and reproduce in all copies of the Licensed Technology the copyright, trademark, and other proprietary notices and disclaimers of Epic and third parties as they appear in the Engine Code and the Content.&nbsp;
+	</p>
+
+	<p>
+		You agree to place the following notices in the credits for any Product (replacing xxxx with the current year):
+	</p>
+
+	<p>
+		&ldquo;[Product name] uses the Unreal&reg; Engine.&nbsp; Unreal&reg; is a trademark or registered trademark of Epic Games, Inc. in the United States of America and elsewhere&rdquo;
+	</p>
+
+	<p>
+		&ldquo;Unreal&reg; Engine, Copyright 1998 &ndash; xxxx, Epic Games, Inc.&nbsp; All rights reserved.&rdquo;
+	</p>
+
+	<p>
+		No other license or right in the Epic Trademarks is granted under this Agreement.&nbsp; All use of the Epic Trademarks will inure to the sole benefit of Epic.&nbsp; You agree not to engage in any activity that could tarnish, dilute, or affect the validity or enforceability of the Epic Trademarks or cause consumer confusion or diminish any goodwill relating to any Epic Trademarks.&nbsp; If you wish to make further use of the Epic Trademarks, please go to <a href="//unrealengine.com/branding-guidelines-and-trademark-usage">https://www.unrealengine.com/branding-guidelines-and-trademark-usage</a>.
+	</p>
+
+	<p>
+		Epic may use your trademarks, service marks, trade names, and logos used with any Product, as well as publicly released screen shots and video content from the Product, in connection with Epic&rsquo;s marketing, advertisement, and promotion of the Unreal&reg; Engine in any and all media without restriction.
+	</p>
+
+	<p>
+		<strong>12. Hardware and Usage Data</strong>
+	</p>
+
+	<p>
+		You acknowledge that, as a default setting, the Engine Code will collect and send to Epic anonymous hardware and usage data from end users of Products.&nbsp; This functionality is used by Epic to improve the Engine Code.&nbsp; You may modify the Engine Code under the License to turn off that functionality in your Product, or you may include in your Product the capability for your end users to turn off that functionality in the Product.
+	</p>
+
+	<p>
+		<strong>13. Disclaimers and Limitation of Liability&nbsp; </strong>
+	</p>
+
+	<p>
+		<strong>The Licensed Technology, the Marketplace, and all other materials and information provided by Epic (the &ldquo;Epic Materials&rdquo;) are provided on an &ldquo;as is&rdquo; and &ldquo;as available&rdquo; basis, &ldquo;with all faults&rdquo; and without warranty of any kind.&nbsp; Epic, its licensors, and its and their affiliates disclaim all warranties, conditions, common law duties, and representations (express, implied, oral, and written) with respect to the Epic Materials, including without limitation all express, implied, and statutory warranties and conditions of any kind, such as title, non-interference with your enjoyment, authority, non-infringement, merchantability, fitness or suitability for any purpose (whether or not Epic knows or has reason to know of that purpose), </strong><strong>system integration, </strong><strong>accuracy or completeness, results, reasonable care, workmanlike effort, lack of negligence, and lack of viruses, whether alleged to arise under law, by reason of custom or usage in the trade, or by course of dealing.&nbsp; Without limiting the generality of the foregoing, Epic, its licensors, and its and their affiliates make no warranty that (1) any of the Epic Materials will operate properly</strong><strong>, including </strong><strong>as integrated in any Product, (2) that the Epic Materials will meet your requirements, (3) that the operation of the Epic Materials will be </strong><strong>uninterrupted, </strong><strong>bug free</strong><strong>,</strong><strong> or error free in any or all circumstances, (4) that any defects in the Epic Materials can or will be corrected, (5) that the Epic Materials are or will be in compliance with a platform manufacturer&rsquo;s rules or requirements, or (6) that a platform manufacturer will approve any of your Products, or will not revoke approval of any Product for any or no reason.&nbsp; Any warranty against infringement that may be provided in Section 2-312 of the Uniform Commercial Code or in any other comparable statute is expressly disclaimed.&nbsp; Epic, its licensors, and its and their affiliates do not guarantee continuous, error-free, virus-free, or secure operation of or access to the Epic Materials.&nbsp; This paragraph will apply to the maximum extent permitted by applicable law. </strong>
+	</p>
+
+	<p>
+		<strong>To the maximum extent permitted by applicable law, neither Epic, its licensors, nor its or their affiliates, nor any of Epic&rsquo;s service providers, shall be liable in any way for loss or damage of any kind resulting from the use or inability to use the Epic Materials or otherwise in connection with this Agreement, including but not limited to loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses.&nbsp; In no event will Epic, its licensors, nor its or their affiliates, nor any of Epic&rsquo;s service providers be liable for any loss of profits or any indirect, incidental, consequential, special, punitive, or exemplary damages, or any other damages arising out of or in connection with this Agreement or the Epic Materials, or the delay or inability to use or lack of functionality of the Epic Materials, even in the event of Epic&rsquo;s or its affiliates&rsquo; fault, tort (including negligence), strict liability, indemnity, product liability, breach of contract, breach of warranty, or otherwise and even if Epic or its affiliates have been advised of the possibility of such damages.&nbsp; These limitations and exclusions regarding damages apply even if any remedy fails to provide adequate compensation.</strong>
+	</p>
+
+	<p>
+		<strong>Because some states or jurisdictions do not allow the exclusion or the limitation of liability for consequential or incidental damages, in those states or jurisdictions, the foregoing limitations of liability shall apply only to the full extent permitted by law.</strong>
+	</p>
+
+	<p>
+		<strong>14. Indemnity&nbsp; </strong>
+	</p>
+
+	<p>
+		You agree to indemnify, pay the defense costs of, and hold Epic, its licensors, its and their affiliates, and its and their employees, officers, directors, agents, contractors, and other representatives harmless from all claims, demands, actions, losses, liabilities, and expenses (including attorneys&rsquo; fees, costs, and expert witnesses&rsquo; fees) that arise from or in connection with (a) any claim that, if true, would constitute a breach by you of this Agreement (including, without limitation, any Distribution or sublicensing of the Licensed Technology in violation of this Agreement) or negligence by you, (b) any claim brought by any third party to whom you Distribute or sublicense the Licensed Technology in violation of this Agreement (including without limitation any claim that the Licensed Technology infringes a patent), (c) any claim that any Product or any other matter you created, or your exercise of the Epic Licenses, infringes any third party&rsquo;s intellectual property rights or other proprietary or personal rights (except to the extent of any claim that your authorized use of unmodified Engine Code or Content originally provided to you by Epic under this Agreement infringes any United States patent, trademark or copyright), or (d) any federal, state, or foreign civil or criminal actions related to any Product.&nbsp; You agree to reimburse Epic on demand for any defense costs incurred by Epic and any payments made or loss suffered by Epic, whether in a court judgment or settlement, based on any matter covered by this Section 14.
+	</p>
+
+	<p>
+		If you are prohibited by law from entering into the indemnification obligation above, then you assume, to the extent permitted by law, all liability for all claims, demands, actions, losses, liabilities, and expenses (including attorneys&rsquo; fees, costs and expert witnesses&rsquo; fees) that are the stated subject matter of the indemnification obligation above.&nbsp;
+	</p>
+
+	<p>
+		<strong>15. Export Compliance</strong>&nbsp;
+	</p>
+
+	<p>
+		You agree to comply with all applicable federal and foreign laws, regulations, and rules, and complete any required undertakings.&nbsp; You will&nbsp;obtain&nbsp;any necessary export license or other governmental approval&nbsp;prior to accessing,&nbsp;downloading, exporting, re-exporting, or releasing the Licensed Technology.&nbsp;You represent and warrant that you do not appear on any United States list of prohibited or restricted parties (including the Specially Designated Nationals List).
+	</p>
+
+	<p>
+		<strong>16. Term and Termination&nbsp; </strong>
+	</p>
+
+	<p>
+		<strong>A.&nbsp; Term of the License.&nbsp; </strong>This Agreement will continue in effect unless terminated as described below.&nbsp;
+	</p>
+
+	<p>
+		<strong>B.&nbsp; Termination by Epic.&nbsp; </strong>Epic may terminate the Agreement by providing written notice if you materially breach any provision of this Agreement and the breach is not curable or, if it is curable, you fail to cure the breach within thirty (30) days of notice of the breach from Epic. &nbsp;Without limiting the foregoing, your failure to make any payment due under this Agreement or breach of any restriction under the Epic Licenses constitutes a material breach of this Agreement.
+	</p>
+
+	<p>
+		<strong>C.&nbsp; Termination for Patent Action.</strong>&nbsp; The Agreement will terminate automatically as of the date you commence any claim that the Licensed Technology infringes a patent, or otherwise support any claim by a third party that the Licensed Technology infringes a patent.
+	</p>
+
+	<p>
+		<strong>D.&nbsp; Effect of Termination.&nbsp; </strong>Upon any termination, the Epic Licenses will automatically terminate, you may no longer exercise any of the rights granted to you by the Epic Licenses, and you must destroy all copies of the Licensed Technology in your possession and cease distributing any Products developed under this Agreement.&nbsp; Within 30 days of termination, unless otherwise agreed by Epic, you must destroy all Products in your inventory.&nbsp;
+	</p>
+
+	<p>
+		<strong>E.&nbsp; No Refunds&nbsp; </strong>
+	</p>
+
+	<p>
+		<strong>Except to the extent required by law, all payments, fees and royalties are non-refundable under all circumstances, regardless of whether or not this Agreement has been terminated.</strong>
+	</p>
+
+	<p>
+		<strong>F.&nbsp;&nbsp; Surviving Provisions&nbsp; </strong>
+	</p>
+
+	<p>
+		Sections 4-6, 8-10, 12-14, 16-18, and 22-26 will survive termination of this Agreement.
+	</p>
+
+	<p>
+		<strong>17. Governing Law and Jurisdiction</strong>
+	</p>
+
+	<p>
+		You agree that this Agreement will be deemed to have been made and executed in the State of North Carolina, U.S.A., and any dispute will be resolved in accordance with the laws of North Carolina, excluding that body of law related to choice of laws, and of the United States of America. &nbsp;Any action or proceeding brought to enforce the terms of this Agreement or to adjudicate any dispute must be brought in the Superior Court of Wake County, State of North Carolina or the United States District Court for the Eastern District of North Carolina.&nbsp; You agree to the exclusive jurisdiction and venue of these courts.&nbsp; You waive any claim of inconvenient forum and any right to a jury trial.&nbsp; The Convention on Contracts for the International Sale of Goods will not apply.&nbsp; Any law or regulation which provides that the language of a contract shall be construed against the drafter will not apply to this Agreement.
+	</p>
+
+	<p>
+		<strong>18. Class Action Waiver</strong>
+	</p>
+
+	<p>
+		<strong>You agree not to bring or participate in a class or representative action, private attorney general action, or collective arbitration related to the Licensed Technology or this Agreement.&nbsp; You also agree not to seek to combine any action or arbitration related to the Licensed Technology or this Agreement with any other action or arbitration without the consent of all parties to this Agreement and all other actions or arbitrations.</strong>
+	</p>
+
+	<p>
+		<strong>19. U.S. Government End Users</strong>
+	</p>
+
+	<p>
+		The Licensed Technology and related documentation are &ldquo;Commercial Items&rdquo; (as defined at 48 C.F.R. &sect;2.101), consisting of &ldquo;Commercial Computer Software&rdquo; and &ldquo;Commercial Computer Software Documentation&rdquo; (as used in 48 C.F.R. &sect;12.212 or 48 C.F.R. &sect;227.7202, as applicable). &nbsp;The Licensed Technology is being licensed to U.S. Government end users only as Commercial Items and with only those rights as are granted to other licensees (other than Academic Institutions) under this Agreement. &nbsp;
+	</p>
+
+	<p>
+		<strong>20. Independent Contractor&nbsp; </strong>
+	</p>
+
+	<p>
+		You and Epic are independent contractors and are not the legal representative, agent, joint venturer, partner, or employee of the other.&nbsp; Neither party has any right or authority to assume or create any obligations of any kind or to make any representation or warranty on behalf of the other party.
+	</p>
+
+	<p>
+		<strong>21. Amendments of this Agreement</strong> &nbsp;
+	</p>
+
+	<p>
+		<strong>Epic may issue an amended Agreement at any time in its discretion by providing notice to you or by providing you with digital access to the amended Agreement when you next log in to your Account, access the Marketplace, or download additional Content or new Versions.&nbsp; You are not required to accept the amended Agreement.&nbsp; However, in order to continue accessing your Account or the Marketplace or to download or use additional Content or new Versions, you must accept the amended Agreement.&nbsp; By logging in to your Account, using the Marketplace, or downloading or using additional Content or a new Version, you hereby agree to be bound by the amended Agreement then most recently issued by Epic.&nbsp; If you do not accept the amended Agreement, you may not log in to your Account, access the Marketplace, download or use additional Content, or download or use any new Version that is made available by Epic contemporaneously with or after the issuance of that amended Agreement (but this will not terminate your License for the Licensed Technology that you downloaded prior to the issuance of the amended Agreement).&nbsp; If you are a legal entity, acceptance of an amended Agreement by any of your Users will be binding on you.</strong>
+	</p>
+
+	<p>
+		<strong>22. Notices</strong><span style="line-height: 1.6em;">&nbsp;</span>
+	</p>
+
+	<p>
+		Where this Agreement calls for notice from Epic, including written notice, Epic may provide notice to you at the email address that you provided when you registered for the License (or any updated email address you subsequently provide).&nbsp; Epic&rsquo;s notices to you will be effective when they are sent to that email address.
+	</p>
+
+	<p>
+		<strong>23. No Assignment</strong>
+	</p>
+
+	<p>
+		You may not, without the prior written consent of Epic, assign, transfer, charge, or sub-contract all or any of your rights or obligations under this Agreement, and any attempt without that consent will be null and void. &nbsp;You also may not transfer your Account.&nbsp; Epic may at any time assign, transfer, charge, or sub-contract all or any of its rights or obligations under this Agreement.&nbsp; For clarity, you are not prohibited by Epic from assigning or transferring your rights in your Product, other than the Engine Code, Assets, and Contributions.&nbsp; Third Party Software assignment and transfer is governed by the terms of the applicable licenses.
+	</p>
+
+	<p>
+		<strong>24. Definitions</strong>&nbsp;
+	</p>
+
+	<p>
+		As used in this Agreement, the following capitalized words have the following meanings:&nbsp;&nbsp;
+	</p>
+
+	<p>
+		&ldquo;<strong>Academic Institution</strong>&rdquo; means any educational institution such as, but not limited to, a university, college, or high school, as well as libraries.
+	</p>
+
+	<p>
+		&ldquo;<strong>Account</strong>&rdquo; means a user account with a unique ID and associated password selected by you, which enables you to download the Engine Code and Content under the License.
+	</p>
+
+	<p>
+		&ldquo;<strong>Content</strong>&rdquo; means any code, artwork, or other content that Epic makes available to you for use with the Engine Code, other than any Unreal Tournament Content.&nbsp; For clarity, Content includes but is not limited to Marketplace Content and UE-Only Content.
+	</p>
+
+	<p>
+		&ldquo;<strong>Contribution</strong>&rdquo; means any code, whether in Source Code format or object code format, or any other information or content, that you make available to Epic by any means (<em>e.g.</em>, via submissions to forums, wiki, or Epic&rsquo;s GitHub UnrealEngine Network, or through email or otherwise).&nbsp; However, code, information, or content that you only make available to Epic as part of a Marketplace Submission at <a href="//unrealengine.com/marketplace/submissions/">unrealengine.com/marketplace/submissions</a> does not constitute a Contribution.&nbsp; In addition, mere use of code or content with the Licensed Technology, without making that code or content available to Epic, does not constitute a Contribution.
+	</p>
+
+	<p>
+		&ldquo;<strong>Custom License</strong>&rdquo; means any agreement signed by you and Epic at any time, other than this Agreement or any amendment to this Agreement, under which you are granted a license to use the Unreal&reg; Engine to develop one or more product(s).
+	</p>
+
+	<p>
+		&ldquo;<strong>Custom Product</strong>&rdquo; means a product developed pursuant to a Custom License.
+	</p>
+
+	<p>
+		&ldquo;<strong>Distribute</strong>&rdquo; means to provide or otherwise make a copy available, or to make its functionality available on a network.
+	</p>
+
+	<p>
+		&ldquo;<strong>Engine Code</strong>&rdquo; means the Source Code and object code of the Unreal&reg; Engine, including any future Versions, as made available to you by Epic under this Agreement, and any object code compiled from that Source Code.
+	</p>
+
+	<p>
+		&ldquo;<strong>Engine Licensee</strong>&rdquo; means a third party who is separately licensed by Epic to use the Engine Code and Content.
+	</p>
+
+	<p>
+		&ldquo;<strong>Engine Tools</strong>&rdquo; means (a) editors and other tools included in the Engine Code; (b) any code and modules in either the Developer or Editor folders, including in object code format, whether statically or dynamically linked; and (c) other software that&nbsp;may be used to develop standalone products based on the Licensed Technology.
+	</p>
+
+	<p>
+		&ldquo;<strong>Epic</strong>&rdquo; means, depending on the location of your primary residence or primary place of business:
+	</p>
+
+	<p>
+		<strong>a.&nbsp;&nbsp; Epic Games, Inc., a Maryland Corporation having its principal business offices at Box 254, 2474 Walnut Street, Cary, North Carolina, 27518, U.S.A.; or</strong>
+	</p>
+
+	<p>
+		<strong>b.&nbsp;&nbsp; Epic Games International S.&agrave; r.l., a Luxembourg Soci&eacute;t&eacute; &agrave; Responsibilit&eacute; Limit&eacute;e, located at Atrium Business Park, 33 rue du Puits Romain, L8070 Bertrange, Grand-Duchy of Luxenbourg, acting through its Swiss branch, having its principal business offices at Lindenstrasse 16, 6341 Baar, Switzerland.&nbsp;</strong>
+	</p>
+
+	<p>
+		&ldquo;<strong>Epic Licenses</strong>&rdquo; means the License and the Unreal Tournament License.
+	</p>
+
+	<p>
+		&ldquo;<strong>Epic Trademarks</strong>&rdquo; means the trademarks, service marks, trade names and logos associated with Epic, Epic&rsquo;s games and other intellectual property, and the Unreal&reg; Engine.
+	</p>
+
+	<p>
+		&ldquo;<strong>Examples</strong>&rdquo; means the Engine Code and Content made available by Epic in the Samples and Templates folders in the install directory or in the Content Examples projects available through the Marketplace.
+	</p>
+
+	<p>
+		&ldquo;<strong>Feedback</strong>&rdquo; means any feedback or suggestions that you provide to Epic regarding the Licensed Technology or the Marketplace.&nbsp;
+	</p>
+
+	<p>
+		&ldquo;<strong>Licensed Technology</strong>&rdquo; means any or all of the Engine Code and the Content, including as modified by you under the License.
+	</p>
+
+	<p>
+		&ldquo;<strong>Marketplace</strong>&rdquo; means the Unreal&reg; Engine digital marketplace or other Unreal&reg; Engine learning resource maintained by Epic or its affiliates, through which, among other things, Epic makes certain Content and Engine Code available for use under the License.
+	</p>
+
+	<p>
+		&ldquo;<strong>Marketplace Content</strong>&rdquo; means Content made available to you through the Marketplace for an additional fee.
+	</p>
+
+	<p>
+		&ldquo;<strong>Product</strong>&rdquo; means any product developed under this Agreement that is made using the Licensed Technology or that combines the Licensed Technology with any other software or content, regardless of how much or little of the Licensed Technology is used.&nbsp;
+	</p>
+
+	<p>
+		&ldquo;<strong>Source Code</strong>&rdquo; means the human readable form of a software program, including all modules it contains, plus any associated interface definition files, scripts used to control compilation, and installation of an executable (object code).
+	</p>
+
+	<p>
+		&ldquo;<strong>Third Party Software</strong>&rdquo; means third party software components included in the Engine Code.
+	</p>
+
+	<p>
+		&ldquo;<strong>UE-Only Content</strong>&rdquo; means Marketplace Content that is designated in the Marketplace as usable only in conjunction with the Engine Code. &nbsp;
+	</p>
+
+	<p>
+		&ldquo;<strong>Unreal&reg; Engine</strong>&rdquo; means the proprietary computer software program known as the Unreal&reg; Engine and any updates or upgrades to the program made available by Epic.
+	</p>
+
+	<p>
+		&ldquo;<strong>Unreal Tournament Code Contribution</strong>&rdquo; means any Unreal Tournament Contribution that consists of code but does not include any Unreal Tournament Content (including as modified by you under the Unreal Tournament License) or other content.
+	</p>
+
+	<p>
+		&ldquo;<strong>Unreal Tournament Content</strong>&rdquo; means any code, artwork, or other content from, directly or indirectly, the GitHub UnrealEngine Network folder located at /UnrealTournament/Source or /UnrealTournament/Content/RestrictedAssets.
+	</p>
+
+	<p>
+		&ldquo;<strong>Unreal Tournament Content Contribution</strong>&rdquo; means any Unreal Tournament Contribution that includes information or content other than code.
+	</p>
+
+	<p>
+		&ldquo;<strong>Unreal Tournament Contribution</strong>&rdquo; means any Contribution that utilizes, incorporates, or is based on any Unreal Tournament Content (including as modified by you under the Unreal Tournament License).&nbsp;&nbsp;
+	</p>
+
+	<p>
+		&ldquo;<strong>Unreal Tournament Project</strong>&rdquo; means the development project, established on May 8, 2014 and curated by Epic through the GitHub UnrealEngine Network, for the development of a new Unreal Tournament video game.
+	</p>
+
+	<p>
+		&ldquo;<strong>Unreal Tournament UGC</strong>&rdquo; means original code, artwork, or other content that you create for use with the Unreal Tournament video game that is being developed in the Unreal Tournament Project.&nbsp;
+	</p>
+
+	<p>
+		&ldquo;<strong>User</strong>&rdquo; means an individual user who uses a valid Account to access the Engine Code, Content, and the Marketplace.&nbsp; If you are an individual, &ldquo;User&rdquo; means you.&nbsp; For legal entities, &ldquo;User&rdquo; means the individual employee or agent through whom you are exercising rights under this Agreement.
+	</p>
+
+	<p>
+		&ldquo;<strong>Version</strong>&rdquo; means any updated or upgraded version of the Engine Code or Content that Epic chooses to make available to the public.
+	</p>
+
+	<p>
+		&ldquo;<strong>You,</strong>&rdquo; &ldquo;<strong>your</strong>&rdquo; or &ldquo;<strong>yourself</strong>&rdquo;, whether or not capitalized in this Agreement, means you as an individual or the legal entity exercising rights under this Agreement through you.&nbsp; For legal entities, &ldquo;you,&rdquo; &ldquo;your&rdquo; and &ldquo;yourself&rdquo; include any entity that controls, is controlled by, or is under common control with you, where &ldquo;control&rdquo; means the power, direct or indirect, to cause the direction or management of the entity in question, whether by contract or otherwise, or ownership of 50% or more of the outstanding shares or beneficial ownership of the entity in question.
+	</p>
+
+	<p>
+		<strong>25. Custom Licenses</strong>
+	</p>
+
+	<p>
+		Custom Licenses are not modified or otherwise affected by this Agreement.&nbsp; For Custom Products, the terms of your applicable Custom License will govern all matters (including royalties, notifications, Feedback, Contributions, trademarks, service marks, trade names, logos, screen shots, and video content related to those Custom Products) related to your use of the code, artwork, and content that are licensed to you under that Custom License, instead of the terms of this Agreement.&nbsp;
+	</p>
+
+	<p>
+		You may exercise your rights in Marketplace Content under this License in connection with Custom Products that are developed and Distributed under your Custom License as if they were Products developed and Distributed under the License.&nbsp; However, your exercise of those rights in connection with Custom Products is governed by and subject to the terms of this Agreement, including without limitation all obligations and limitations that apply to use of Marketplace Content in connection with Products, as well as all disclaimers, limitations of liability, and indemnification rights of Epic, whether related to Marketplace Content, Products, or otherwise.&nbsp; Despite this, no royalty is owed under this Agreement on Custom Products, but royalties may be owed on Custom Products under the terms of a Custom License.
+	</p>
+
+	<p>
+		As used in this Agreement, the defined term &ldquo;Product&rdquo; does not include Custom Products, and except as described above, the terms of this Agreement applicable to Products do not apply to Custom Products.
+	</p>
+
+	<p>
+		<strong>26. Miscellaneous</strong>
+	</p>
+
+	<p>
+		This Agreement and any document or information referred to in this Agreement constitute the entire agreement between you and Epic relating to the subject matter covered by this Agreement.&nbsp; All other communications, proposals, and representations with respect to the subject matter covered by this Agreement are excluded.&nbsp;
+	</p>
+
+	<p>
+		The original of this Agreement is in English; any translations are provided for reference purposes only.&nbsp; You waive any right you may have under the law of your country to have this Agreement written or construed in the language of any other country.
+	</p>
+
+	<p>
+		This Agreement describes certain legal rights. You may have other rights under the laws of your jurisdiction. This Agreement does not change your rights under the laws of your jurisdiction if the laws of your jurisdiction do not permit it to do so. Limitations and exclusions of warranties and remedies in this Agreement may not apply to you because your jurisdiction may not allow them in your particular circumstance.&nbsp; In the event that certain provisions of this Agreement are not enforceable in your jurisdiction, those provisions shall be enforceable to the furthest extent possible under applicable law.
+	</p>
+
+	<p>
+		Any act by Epic to exercise, or failure or delay in exercise of, any of its rights under this Agreement, at law or in equity will not be deemed a waiver of those or any other rights or remedies available in contract, at law or in equity.
+	</p>
+
+	<p>
+		Unless otherwise stated in this Agreement, if any term of this Agreement is held by a court or tribunal of competent jurisdiction to be unenforceable, the term will be enforced to the maximum extent permissible and the remaining terms of this Agreement will remain in full force and effect.&nbsp; You agree that this Agreement does not confer any rights or remedies on any person other than the parties to this Agreement, except as expressly stated.
+	</p>
+
+	<p>
+		Epic&rsquo;s obligations are subject to existing laws and legal process, and Epic may comply with law enforcement or regulatory requests or requirements despite any contrary term in this Agreement.
+	</p>
+
+=end html
