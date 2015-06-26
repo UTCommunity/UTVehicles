@@ -1,1 +1,5 @@
-﻿UTVehicles is licensed under the terms of the latest version of the Unreal® Engine End User License Agreement, obtainable at https://unrealengine.com/eula. A copy of the license text, as obtained on 2015-06-26, is included in the UE4EULA.pod file (for reference purposes only).
+﻿UTVehicles is licensed under the terms of the latest version of the Unreal® Engine
+End User License Agreement, obtainable at https://unrealengine.com/eula.
+
+A copy of the license text, as obtained on 2015-06-26, is included in the 
+UE4EULA.pod file (for reference purposes only).
