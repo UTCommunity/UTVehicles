@@ -10,7 +10,10 @@ class AAAAUTPlayerController : public AUTPlayerController
 	GENERATED_UCLASS_BODY()
 
 	// Temp
+	// Begin AUTPlayerController Interface.
+	virtual void InitInputSystem() override;
 	virtual void SetupInputComponent() override;
+	// End AUTPlayerController Interface.
 
 	/** Getter for Vehicle */
 	FORCEINLINE AVehicle* GetVehicle() const { return Cast<AVehicle>(GetPawn()); }

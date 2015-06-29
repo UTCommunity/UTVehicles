@@ -3,6 +3,7 @@
 #include "AAAUTCharacter.h"
 #include "Vehicle.h"
 #include "UTVehicle.h"
+#include "AAAUTPlayerInput.h"
 
 #define AUTPlayerController AAAAUTPlayerController
 #define AUTCharacter AAAAUTCharacter
@@ -18,6 +19,16 @@ AUTPlayerController::AUTPlayerController(const FObjectInitializer& ObjectInitial
 	VehicleCheckRadiusScaling = 1.0f;
 }
 
+void AUTPlayerController::InitInputSystem()
+{
+	if (PlayerInput == NULL)
+	{
+		PlayerInput = NewObject<UUTPlayerInput>(this, UAAAUTPlayerInput::StaticClass());
+	}
+
+	Super::InitInputSystem();
+}
+
 void AUTPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -25,51 +36,53 @@ void AUTPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Use", IE_Pressed, this, &AUTPlayerController::Use);
 }
 
-void AUTPlayerController::MoveForward(float Val)
+void AUTPlayerController::MoveForward(float Value)
 {
 	if (AVehicle* Vehicle = Cast<AVehicle>(GetPawn()))
 	{
-		Vehicle->SetThrottleInput(Val);
+		MovementForwardAxis = FMath::Clamp<float>(MovementForwardAxis + Value, -1., 1.f);
+		Vehicle->SetThrottleInput(MovementForwardAxis);
 	}
 	else
 	{
-		Super::MoveForward(Val);
+		Super::MoveForward(Value);
 	}
 }
 
-void AUTPlayerController::MoveBackward(float Val)
+void AUTPlayerController::MoveBackward(float Value)
 {
 	if (AVehicle* Vehicle = Cast<AVehicle>(GetPawn()))
 	{
-		Vehicle->SetThrottleInput(Val);
+		MoveForward(Value * -1);
 	}
 	else
 	{
-		Super::MoveBackward(Val);
+		Super::MoveBackward(Value);
 	}
 }
 
-void AUTPlayerController::MoveLeft(float Val)
+void AUTPlayerController::MoveLeft(float Value)
 {
 	if (AVehicle* Vehicle = Cast<AVehicle>(GetPawn()))
 	{
-		Vehicle->SetSteeringInput(Val);
+		MoveRight(Value * -1);
 	}
 	else
 	{
-		Super::MoveLeft(Val);
+		Super::MoveLeft(Value);
 	}
 }
 
-void AUTPlayerController::MoveRight(float Val)
+void AUTPlayerController::MoveRight(float Value)
 {
 	if (AVehicle* Vehicle = Cast<AVehicle>(GetPawn()))
 	{
-		Vehicle->SetSteeringInput(Val);
+		MovementStrafeAxis = FMath::Clamp<float>(MovementStrafeAxis + Value, -1., 1.f);
+		Vehicle->SetSteeringInput(MovementStrafeAxis);
 	}
 	else
 	{
-		Super::MoveRight(Val);
+		Super::MoveRight(Value);
 	}
 }
 
@@ -101,7 +114,7 @@ void AUTPlayerController::Crouch()
 {
 	if (AVehicle* Vehicle = Cast<AVehicle>(GetPawn()))
 	{
-		Vehicle->SetRiseInput(1.0f);
+		Vehicle->SetRiseInput(-1.0f);
 	}
 	else
 	{
