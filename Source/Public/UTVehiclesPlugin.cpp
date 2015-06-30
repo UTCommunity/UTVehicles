@@ -26,6 +26,30 @@ void FUTVehiclesPlugin::ShutdownModule()
 	
 }
 
+AActor* Trace(AActor* TraceActor, FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVector TraceStart, bool bTraceActors, FVector Extent/*, FHitResult& OutHit*/, int ExtraTraceFlags)
+{
+	check(TraceActor != NULL);
+	check(TraceActor->GetWorld() != NULL);
+
+	FHitResult HitResult;
+	static FName NAME_UseTrace = FName(TEXT("UseTrace"));
+	FCollisionQueryParams TraceParams(NAME_UseTrace, true);
+
+	// by default the raycasting Actor shouldn't be hit
+	TraceParams.AddIgnoredActor(TraceActor);
+
+	// TODO: Implement Sweep trace with Extent
+	bool bHit = TraceActor->GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
+	if (bHit)
+	{
+		HitLocation = HitResult.ImpactPoint;
+		HitNormal = HitResult.ImpactNormal;
+		return HitResult.Actor.Get();
+	}
+
+	return NULL;
+}
+
 AActor* Trace(FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVector TraceStart, bool bTraceActors, FVector Extent/*, FHitResult& OutHit*/, int ExtraTraceFlags)
 {
 	const UWorld* const World = GWorld;
