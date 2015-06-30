@@ -8,6 +8,14 @@ class AAAAUTCharacter : public AUTCharacter
 {
 	GENERATED_UCLASS_BODY()
 
+	// Begin AUTCharacter Interface.
+	virtual void BeginPlay() override;
+	virtual bool Died(AController* EventInstigator, const FDamageEvent& DamageEvent) override;
+	// End AUTCharacter Interface.
+
+	UFUNCTION()
+	virtual void OnPawnDied(AController* Killer, const UDamageType* DamageType);
+
 	/** Radius that is checked for nearby vehicles when pressing use */
 	UPROPERTY(EditAnywhere)
 	float VehicleCheckRadius;

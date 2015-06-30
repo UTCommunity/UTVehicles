@@ -36,6 +36,39 @@ void AUTPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Use", IE_Pressed, this, &AUTPlayerController::Use);
 }
 
+void AUTPlayerController::ServerSuicide_Implementation()
+{
+	// TODO: Pull request? Use Interface, use ServerSuicideInternal, ...?
+
+	// throttle suicides to avoid spamming to grief own team in TDM
+	if (GetPawn() != NULL && (GetWorld()->TimeSeconds - GetPawn()->CreationTime > 10.0f || GetWorld()->WorldType == EWorldType::PIE || GetNetMode() == NM_Standalone))
+	{
+		AVehicle* Vec = Cast<AVehicle>(GetPawn());
+		if (Vec != NULL && Vec->PlayerSuicideInternal())
+		{
+			return;
+		}
+
+		Super::ServerSuicide_Implementation();
+	}
+}
+
+void AUTPlayerController::UpdateHiddenComponents(const FVector& ViewLocation, TSet<FPrimitiveComponentId>& HiddenComponents)
+{
+	Super::UpdateHiddenComponents(ViewLocation, HiddenComponents);
+
+	// prevent hiding vehicle
+	AVehicle* Vec = Cast<AVehicle>(GetPawn());
+	if (Vec != NULL)
+	{
+		UPrimitiveComponent* RootPrim = Cast<UPrimitiveComponent>(Vec->GetRootComponent());
+		if (RootPrim != NULL)
+		{
+			HiddenComponents.Remove(RootPrim->ComponentId);
+		}
+	}
+}
+
 void AUTPlayerController::MoveForward(float Value)
 {
 	if (AVehicle* Vehicle = Cast<AVehicle>(GetPawn()))

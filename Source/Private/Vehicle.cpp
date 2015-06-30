@@ -45,6 +45,11 @@ void AVehicle::PreReplication(IRepChangedPropertyTracker & ChangedPropertyTracke
 	DOREPLIFETIME_ACTIVE_OVERRIDE(AVehicle, Driver, Driver == NULL || !Driver->bHidden);
 }
 
+void AVehicle::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
+
 void AVehicle::OnRep_Driver()
 {
 	if ((PlayerState != NULL) && (Driver != NULL))
@@ -72,9 +77,13 @@ void AVehicle::DisplayDebug(class UCanvas* Canvas, const FDebugDisplayInfo& Debu
 	{
 		YL = Canvas->DrawText(RenderFont, TEXT("NO DRIVER"), 4.0f, YPos);
 	}
+	else if (Driver->GetMesh() == NULL)
+	{
+		YL = Canvas->DrawText(RenderFont, TEXT("NO MESH"), 4.0f, YPos);
+	}
 	else
 	{
-		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), Driver->GetMesh(), Driver->bHidden), 4.0f, YPos);
+		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), *(Driver->GetMesh()->GetName()), Driver->bHidden), 4.0f, YPos);
 	}
 	YPos += YL;
 }
@@ -116,6 +125,17 @@ void AVehicle::UnPossessed()
 
 void AVehicle::EntryAnnouncement(AController* NewController)
 {
+}
+
+bool AVehicle::PlayerSuicideInternal()
+{
+	if (Role == ROLE_Authority && Driver != NULL)
+	{
+		Driver->PlayerSuicide();
+		return true;
+	}
+
+	return false;
 }
 
 void AVehicle::AttachDriver_Implementation(APawn* P)
@@ -280,7 +300,7 @@ bool AVehicle::DriverLeave_Implementation(bool bForceLeave)
 		}
 	}
 
-	FRotator ExitRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
+	FRotator ExitRotation = GetExitRotation(Controller);
 	SetDriving(false);
 
 	// Reconnect Controller to Driver.
@@ -336,6 +356,70 @@ void AVehicle::DriverLeft()
 	SetDriving(false);
 }
 
+void AVehicle::DriverDied()
+{
+	if (Role < ROLE_Authority || Driver == NULL)
+		return;
+
+	if (AUTGameMode* Game = GetWorld()->GetAuthGameMode<AUTGameMode>())
+	{
+		// TODO: Killer is not reliable. Use proper stored killer
+		//       but due to the call order, the specific killer is not set
+		AController* Killer = LastHitBy;
+		if (Killer == NULL && Driver != NULL)
+		{
+			Killer = Driver->Controller;
+		}
+		if (Killer == NULL)
+		{
+			Killer = Controller;
+		}
+		Game->DiscardInventory(Driver, Killer);
+	}
+
+	AController* C = Controller;
+	Driver->StopDriving(this);
+	Driver->Controller = C;
+	Driver->DrivenVehicle = this; //for in game stats, so it knows pawn was killed inside a vehicle
+
+	if (Controller == NULL)
+		return;
+
+	if (APlayerController *PC = Cast<APlayerController>(C))
+	{
+		// TODO: SetActorLocation is private. Move controller somehow!
+		//Controller->SetActorLocation(GetActorLocation());
+
+		PC->SetViewTarget(Driver);
+		PC->ClientSetViewTarget(Driver);
+	}
+
+	Controller->UnPossess();
+	if (Controller == C)
+		Controller = NULL;
+	C->SetPawn(Driver);
+
+	// make sure driver has PRI temporarily
+	APlayerState* RealPS = Driver->PlayerState;
+	if (RealPS == NULL)
+	{
+		Driver->PlayerState = C->PlayerState;
+	}
+	if (AUTGameMode* Game = GetWorld()->GetAuthGameMode<AUTGameMode>())
+	{
+		Game->DriverLeftVehicle(this, Driver);
+	}
+	Driver->PlayerState = RealPS;
+
+	// Vehicle now has no driver
+	DriverLeft();
+}
+
+FRotator AVehicle::GetExitRotation_Implementation(AController* C)
+{
+	return FRotator(0.f, (C ? C->GetControlRotation().Yaw : 0.f), 0.f);
+}
+
 bool AVehicle::PlaceExitingDriver(APawn* ExitingDriver)
 {
 	if (ExitingDriver == NULL)
@@ -363,7 +447,7 @@ bool AVehicle::PlaceExitingDriver(APawn* ExitingDriver)
 			FVector tryPlace = GetActorLocation() + GetActorRotation().RotateVector(ExitPosition - ZOffset) + ZOffset;
 
 			// First, do a line check (stops us passing through things on exit).
-			if (Trace(HitLocation, HitNormal, tryPlace, GetActorLocation() + ZOffset, false, Extent) != NULL)
+			if (Trace(this, HitLocation, HitNormal, tryPlace, GetActorLocation() + ZOffset, false, Extent) != NULL)
 				continue;
 
 			// Then see if we can place the player there.
@@ -418,14 +502,14 @@ bool AVehicle::TryExitPos(APawn* ExitingDriver, FVector ExitPos, bool bMustFindG
 	FVector HitLocation;
 	FVector HitNormal;
 	FVector StartLocation = GetTargetLocation();
-	if (Trace(HitLocation, HitNormal, ExitPos, StartLocation, false, Slice) != NULL)
+	if (Trace(this, HitLocation, HitNormal, ExitPos, StartLocation, false, Slice) != NULL)
 	{
 		return false;
 	}
 
 	// Now trace down, to find floor
 	float CollisionHeight = ExitingDriver->GetSimpleCollisionHalfHeight() * 2.f;
-	AActor* HitActor = Trace(HitLocation, HitNormal, ExitPos - (CollisionHeight * FVector(0.f, 0.f, 5.f)), ExitPos, true, Slice);
+	AActor* HitActor = Trace(this, HitLocation, HitNormal, ExitPos - (CollisionHeight * FVector(0.f, 0.f, 5.f)), ExitPos, true, Slice);
 
 	if (HitActor == NULL)
 	{
@@ -449,7 +533,6 @@ bool AVehicle::TryExitPos(APawn* ExitingDriver, FVector ExitPos, bool bMustFindG
 	// try placing driver on floor
 	return ExitingDriver->SetActorLocation(NewActorPos);
 }
-
 
 void AVehicle::SetDriving_Implementation(bool bNewDriving)
 {

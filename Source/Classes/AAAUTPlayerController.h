@@ -13,6 +13,8 @@ class AAAAUTPlayerController : public AUTPlayerController
 	// Begin AUTPlayerController Interface.
 	virtual void InitInputSystem() override;
 	virtual void SetupInputComponent() override;
+	virtual void ServerSuicide_Implementation() override;
+	virtual void UpdateHiddenComponents(const FVector& ViewLocation, TSet<FPrimitiveComponentId>& HiddenComponents) override;
 	// End AUTPlayerController Interface.
 
 	/** Getter for Vehicle */

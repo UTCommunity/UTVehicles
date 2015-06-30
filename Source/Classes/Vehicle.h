@@ -1,5 +1,7 @@
 #pragma once
 
+#include "UTWeapon.h"
+#include "UTCharacter.h"
 #include "Vehicle.generated.h"
 
 /**
@@ -17,6 +19,7 @@ class AVehicle : public APawn //, public IVehicleInterface // Note: Interface on
 	//virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	virtual float InternalTakeRadialDamage(float Damage, struct FRadialDamageEvent const& RadialDamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void PreReplication(IRepChangedPropertyTracker & ChangedPropertyTracker) override;
+	virtual void Tick(float DeltaSeconds) override;
 	// End AActor Interface
 
 	/** amount of health this Vehicle has */
@@ -77,13 +80,13 @@ protected:
 	// generic controls (set by controller, used by concrete derived classes)
 
 	// between -1 and 1
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Control input")
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Control input")
 	float Steering; 
 	// between -1 and 1
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Control input")
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Control input")
 	float Throttle;
 	// between -1 and 1
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Control input")
+	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Control input")
 	float Rise;
 
 public: 
@@ -123,6 +126,9 @@ public:
 
 	/** Called when Controller possesses vehicle, for any visual/audio effects */
 	virtual void EntryAnnouncement(AController* NewController);
+
+	/** Called when the player wants to suicide. This will trigger PlayerSuicide on the driver. */
+	virtual bool PlayerSuicideInternal();
 
 	/**
 	* Attach driver to vehicle.
@@ -165,6 +171,14 @@ public:
 	// DriverLeft() called by DriverLeave()
 	UFUNCTION()
 	virtual void DriverLeft();
+
+	/** Called when the driver inside a vehicle has died */
+	UFUNCTION()
+	virtual void DriverDied();
+
+	/** @return The exit rotation for this controller on leaving the vehicle */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Vehicle)
+	FRotator GetExitRotation(AController* C);
 
 	/** Find an acceptable position to place the exiting driver pawn, and move it there.
 	*	Returns true if pawn was successfully placed.
