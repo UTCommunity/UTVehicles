@@ -11,6 +11,7 @@ class AAAAUTCharacter : public AUTCharacter
 	// Begin AUTCharacter Interface.
 	virtual void BeginPlay() override;
 	virtual bool Died(AController* EventInstigator, const FDamageEvent& DamageEvent) override;
+	virtual void Tick(float DeltaSeconds) override;
 	// End AUTCharacter Interface.
 
 	UFUNCTION()
@@ -23,6 +24,12 @@ class AAAAUTCharacter : public AUTCharacter
 	// TODO: Implement once methods are virtual
 	//void StartDriving(APawn* Vehicle) override;
 	//void StopDriving(APawn* Vehicle) override;
+
+	// TODO: Remove once StartDriving and StopDriving are virtual
+	void StartDriving_WORKAROUND(APawn* Vehicle);
+	void StopDriving_WORKAROUND(APawn* Vehicle);
+	APawn* OldDrivenVehicle;
+	bool bDrivenVehicleStored;
 
 	// Note: Insert after ServerUseCarriedObject()
 	// ...

@@ -194,7 +194,7 @@ void AUTPlayerController::ServerUse_Implementation()
 
 bool AUTPlayerController::PerformedUseAction()
 {
-	//bJustFoundVehicle = false;
+	bJustFoundVehicle = false;
 
 	//if (UTPawn(Pawn) != None && UTPawn(Pawn).IsHero())
 	//{

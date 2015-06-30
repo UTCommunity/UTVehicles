@@ -83,4 +83,41 @@ void AUTCharacter::StopDriving(APawn* Vehicle)
 	}
 }*/
 
+// Note: Workaround for StartDriving being non-virtual
+void AUTCharacter::StartDriving_WORKAROUND(APawn* Vehicle)
+{
+	if (AVehicle* V = Cast<AVehicle>(Vehicle))
+	{
+		V->AttachDriver(this);
+	}
+}
+
+// Note: Workaround for StopDriving being non-virtual
+void AUTCharacter::StopDriving_WORKAROUND(APawn* Vehicle)
+{
+	if (AVehicle* V = Cast<AVehicle>(Vehicle))
+	{
+		V->StopFiring();
+		V->DetachDriver(this);
+	}
+}
+
+void AUTCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (!bDrivenVehicleStored && DrivenVehicle != NULL && OldDrivenVehicle == NULL)
+	{
+		OldDrivenVehicle = DrivenVehicle;
+		bDrivenVehicleStored = true;
+		StartDriving_WORKAROUND(DrivenVehicle);
+	}
+	else if (bDrivenVehicleStored && DrivenVehicle == NULL && OldDrivenVehicle != NULL)
+	{
+		StopDriving_WORKAROUND(OldDrivenVehicle);
+		bDrivenVehicleStored = false;
+		OldDrivenVehicle = NULL;
+	}
+}
+
 #undef AUTCharacter

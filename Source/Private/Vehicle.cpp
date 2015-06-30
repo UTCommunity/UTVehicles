@@ -161,8 +161,13 @@ void AVehicle::AttachDriver_Implementation(APawn* P)
 	//P.SetPhysics(PHYS_None); // TODO: FIXME: Set Physics state
 }
 
-void AVehicle::DetachDriver_Implementation(APawn* NewDriver)
+void AVehicle::DetachDriver_Implementation(APawn* P)
 {
+	// TODO: Check if by using SetBase, the base/root is detached. Originally this wasn't required in previous engine
+	if (P != NULL)
+	{
+		P->DetachRootComponentFromParent();
+	}
 }
 
 bool AVehicle::CanEnterVehicle(APawn* P)
