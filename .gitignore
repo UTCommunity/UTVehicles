@@ -9,3 +9,6 @@ Saved/
 
 # Ignore local Content mirror (git repo)
 .content/
+
+# Ignore Releases
+Releases/
