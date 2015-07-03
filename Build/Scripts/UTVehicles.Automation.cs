@@ -292,8 +292,6 @@ public class PluginPackageZip : BuildCommand
 
 					// Commit to the repository
 					LibGit2Sharp.CommitOptions options = new LibGit2Sharp.CommitOptions();
-					options.AmendPreviousCommit = true;
-					options.PrettifyMessage = true;
 					LibGit2Sharp.Commit commit = repo.Commit(commmessage, author, committer, options);
 
 					// TODO: Commit new tag
@@ -398,33 +396,23 @@ public class PluginPackageZip : BuildCommand
 		}
 
 		string filename = DataReadFromFile(".package.name", DEFAULT_PACKAGE_NAME);
-		var formatargs = new
+		Dictionary<string, object> formatargs = new Dictionary<string, object>
 		{
-			PluginName = DLCName,
-			Version = VersionNumber,
-			PreRelease = PreRelease,
-			Solution = SolutionString,
-			Meta = metadata,
-			ChangeList = ChangeListNumber,
-			Platforms = Platforms,
-			Publish = PublishString,
+			{"PluginName", DLCName },
+			{"Version", VersionNumber},
+			{"PreRelease", PreRelease},
+			{"Solution", SolutionString},
+			{"Meta", metadata},
+			{"ChangeList", ChangeListNumber},
+			{"Platforms", Platforms},
+			{"Publish", PublishString},
 		};
 
 		// Check if the current internal build already exists
 		if (!ParseParam("publish"))
 		{
-			// TODO: Use dictonary and overwrite "PreRelease" only
-			var formatargs_check = new
-			{
-				PluginName = DLCName,
-				Version = VersionNumber,
-				PreRelease = "*",
-				Solution = SolutionString,
-				Meta = metadata,
-				ChangeList = ChangeListNumber,
-				Platforms = Platforms,
-				Publish = PublishString,
-			};
+			var formatargs_check = (from x in formatargs select x).ToDictionary(x => x.Key, x => x.Value);
+			formatargs_check["PreRelease"] = "*";
 
 			string BaseFileName = StringFormat(filename, formatargs_check);
 			string[] files = FindFiles(BaseFileName + ".*", false, PublishDir);
@@ -583,9 +571,19 @@ public class PluginPackageZip : BuildCommand
 
 	public static string StringFormat(string input, object p)
 	{
+		Dictionary<string, object> dic = new Dictionary<string, object>();
 		System.ComponentModel.PropertyDescriptorCollection props = System.ComponentModel.TypeDescriptor.GetProperties(p);
+
 		foreach (System.ComponentModel.PropertyDescriptor prop in props)
-			input = CaseInsenstiveReplace(input, "{" + prop.Name + "}", (prop.GetValue(p) ?? "").ToString());
+			dic.Add(prop.Name, prop.GetValue(p));
+
+		return StringFormat(input, dic);
+	}
+
+	public static string StringFormat(string input, Dictionary<string, object> dic)
+	{
+		foreach (var d in dic)
+			input = CaseInsenstiveReplace(input, "{" + d.Key + "}", (d.Value ?? "").ToString());
 
 		return CaseInsenstiveReplace(input, "{(.+?)}", "");
 	}
