@@ -252,6 +252,10 @@ public class PluginPackageZip : BuildCommand
 		Filter.Exclude(".git*");
 		Filter.Exclude(".git/...");
 
+		// always include plugin descriptor file
+		Filter.Include("*.uplugin");
+
+
 		// read current version info from file
 		CreateVersionInfo();
 
