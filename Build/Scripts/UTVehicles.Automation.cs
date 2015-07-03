@@ -200,10 +200,28 @@ public class PluginPackageZip : BuildCommand
 			}
 		}
 
+		// Check if binaries exist
+		{
+			string BinariesFolder = CombinePaths(DLCDir, "Binaries");
+			if (!DirectoryExists(BinariesFolder))
+			{
+				throw new AutomationException("No Binaries folder. Please, recompile the plugin from source files");
+			}
+
+			// TODO: Check for specific files (SO for linux and DLL for windows)
+			if (FindFiles("*", true, BinariesFolder).Length == 0)
+			{
+				throw new AutomationException("No binary files. Please, recompile the plugin from source files");
+			}
+		}
+
 		// Zip plugin
 		FileFilter Filter = new FileFilter();
 		Filter.ExcludeConfidentialFolders();
 		Filter.ExcludeConfidentialPlatforms();
+
+		// TODO: use .gitignore to filter files
+		// TODO: Add build file for includes
 
 		// include bin and plugin content but only valid editor files
 		Filter.Include("Binaries/...");
@@ -222,6 +240,10 @@ public class PluginPackageZip : BuildCommand
 		{
 			Filter.Include("Source/...");
 			Filter.Include("Build/...");
+		}
+		else
+		{
+			Filter.Exclude("Build/...");
 		}
 		Filter.Exclude("Build/.../Obj/...");
 		Filter.Exclude("/Intermediate/...");
@@ -368,7 +390,7 @@ public class PluginPackageZip : BuildCommand
 			PublishString = "_" + BUILD_PREFIX + BuildMeta.ToShortString();
 		}
 
-		// set configuration string (Editor/Game/Full/ etc.)
+		// set configuration string (Editor/Game/Full/...)
 		string SolutionString = ParseParamValue("solution", "");
 		if (HasParam("solution"))
 		{
