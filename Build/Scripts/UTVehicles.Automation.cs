@@ -13,8 +13,18 @@ using System.Web.Script.Serialization;
 using EpicGames.MCP.Automation;
 using EpicGames.MCP.Config;
 
-public class PluginPackageZip : BuildCommand
+public class UTVehicles_PluginPackageZip : BuildCommand
 {
+	public static string PLUGIN_NAME = "UTVehicles";
+	public static string VERSION_NAME = "VERSION";
+
+	public static string BUILD_PREFIX = "Build-";
+	public static string DEFAULT_PACKAGE_NAME = "{PluginName}_v{VERSION}{PRERELEASE}{META}{PUBLISH}{SOLUTION}_{CHANGELIST}-{PLATFORMS}";
+
+	public static string COMMIT_TITLE_VERSION_PUBLISH = "New published version: {0}";
+	public static string COMMIT_TITLE_VERSION_INTERNAL = "New internal build: {0}";
+	
+
     public string DLCName;
     public string DLCMaps;
     public string AssetRegistry;
@@ -30,14 +40,6 @@ public class PluginPackageZip : BuildCommand
 	public MetaInfo BuildMeta;
 	public VersionInfo BuildVersion;
 
-	public static string VERSION_NAME = "VERSION";
-
-	public static string BUILD_PREFIX = "Build-";
-	public static string DEFAULT_PACKAGE_NAME = "{PluginName}_v{VERSION}{PRERELEASE}{META}{PUBLISH}{SOLUTION}_{CHANGELIST}-{PLATFORMS}";
-
-	public static string COMMIT_TITLE_VERSION_PUBLISH = "New published version: {0}";
-	public static string COMMIT_TITLE_VERSION_INTERNAL = "New internal build: {0}";
-	
 	public struct MetaInfo
 	{
 		public int BuildNumber;
@@ -160,6 +162,13 @@ public class PluginPackageZip : BuildCommand
 		VersionString = ParseParamValue("Version", "NOVERSION");
 
 		FileVersionName = VERSION_NAME;
+
+		// prevent processing automation process for the wrong plugin (if mutliple PluginPackageZip commands exist)
+		if (!DLCName.Equals(PLUGIN_NAME, StringComparison.InvariantCultureIgnoreCase))
+		{
+			// no Expception as other plugins need to be processed
+			return;
+		}
 
 		// Check parms
 		if (!DirectoryExists(DLCDir))
