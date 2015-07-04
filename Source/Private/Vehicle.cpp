@@ -83,7 +83,8 @@ void AVehicle::DisplayDebug(class UCanvas* Canvas, const FDebugDisplayInfo& Debu
 	}
 	else
 	{
-		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), *(Driver->GetMesh()->GetName()), Driver->bHidden), 4.0f, YPos);
+		// TODO: FIXME: CRASH: game crashes on enabled this line
+		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), Driver->GetMesh()->GetName(), Driver->bHidden), 4.0f, YPos);
 	}
 	YPos += YL;
 }
