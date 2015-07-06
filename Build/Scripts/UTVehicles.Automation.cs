@@ -9,7 +9,7 @@ using UTVehicles.Automation.Parser;
 
 namespace UTVehicles.Automation
 {
-	public class UTVehicles_PluginPackageZip : BuildCommand
+	public class UTVehicles_PackageZip : BuildCommand
 	{
 		public static string PLUGIN_NAME = "UTVehicles";
 		public static string VERSION_NAME = "VERSION";
@@ -387,10 +387,10 @@ namespace UTVehicles.Automation
 			string zipfolder = Packager.CopyFilesToZip(PublishDir, ZipDir, DLCName, Filter, NoConversion: HasParam("source"), ParseTextOnly: HasParam("ParseTextOnly"));
 			ZipFiles(ZipFile, zipfolder, new FileFilter(FileFilterType.Include));
 
-			if (BuildVersion.IsValid())
+			if (ParseParam("publish") && BuildVersion.IsValid())
 			{
 				bool IsInternal = false;
-				if (ParseParam("publish"))
+				if (ParseParam("release"))
 				{
 					// remove internal build (public release) ... just in case
 					DataWriteToFile(FileVersionName, BuildVersion.ToData(true));
@@ -499,7 +499,7 @@ namespace UTVehicles.Automation
 
 			// set meta string
 			string metadata = BuildMeta.ToString();
-			if (HasParam("publish"))
+			if (HasParam("publish") && HasParam("release"))
 			{
 				metadata = "";
 				PublishString = "_" + BUILD_PREFIX + BuildMeta.ToShortString();
@@ -517,7 +517,7 @@ namespace UTVehicles.Automation
 			if (PreReleaseString.Length > 0)
 			{
 				PreRelease = "-" + PreReleaseString;
-				if (!HasParam("publish"))
+				if (!HasParam("release))
 				{
 					if (BuildMeta.BuildNumber > 0) PreRelease += "." + (BuildVersion.BuildAsNumber + 1);
 					PreRelease += "-" + BuildMeta.Build;
@@ -545,8 +545,8 @@ namespace UTVehicles.Automation
 				{"Publish", PublishString},
 			};
 
-			// Check if the current internal build already exists
-			if (!ParseParam("publish"))
+			// Check if the current internal/local build already exists
+			if (!ParseParam("release"))
 			{
 				var formatargs_check = (from x in formatargs select x).ToDictionary(x => x.Key, x => x.Value);
 				formatargs_check["PreRelease"] = "*";
@@ -555,7 +555,7 @@ namespace UTVehicles.Automation
 				string[] files = FindFiles(BaseFileName + ".*", false, PublishDir);
 				if (files.Length > 0)
 				{
-					throw new AutomationException("Internal build already exists. Nothing's changed. Same build numer.");
+					throw new AutomationException("Internal/local build already exists. Nothing's changed. Same build numer.");
 				}
 			}
 
