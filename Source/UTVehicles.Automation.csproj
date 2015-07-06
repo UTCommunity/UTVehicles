@@ -42,6 +42,7 @@
       <HintPath>..\Build\Scripts\packages\LibGit2Sharp.0.21.0.176\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -58,7 +59,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Build\Scripts\UTVehicles.Automation.cs" />
-    <Compile Include="..\Build\Scripts\Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Build\Scripts\Properties\AssemblyInfo.cs"/>
+    <Compile Include="..\Build\Scripts\Parser\GitIgnoreParser.cs"><Link>Parser\GitIgnoreParser.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\Markdown.cs"><Link>Parser\Markdown.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Packager.cs"><Link>Packager.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\BaseParser.cs"><Link>Parser\BaseParser.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\POD\PODParser.cs"><Link>Parser\POD\PODParser.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\POD\PODSectionBase.cs"><Link>Parser\POD\PODSectionBase.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\POD\PODSectionGroup.cs"><Link>Parser\POD\PODSectionGroup.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\POD\PODSectionItem.cs"><Link>Parser\POD\PODSectionItem.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\POD\PODSectionRaw.cs"><Link>Parser\POD\PODSectionRaw.cs</Link></Compile>
+    <Compile Include="..\Build\Scripts\Parser\POD\SectionTag.cs"><Link>Parser\POD\SectionTag.cs</Link></Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Engine\Source\Programs\AutomationTool\AutomationTool.csproj">
