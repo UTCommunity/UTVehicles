@@ -22,7 +22,7 @@ class AVehicleBase : public APawn, public IBaseChangeInterface
 	int32 HealthMax;
 
 	UPROPERTY(ReplicatedUsing = OnRep_DrivenVehicle)
-	class AVehicle* DrivenVehicle;
+	AVehicleBase* DrivenVehicle;
 
 	UFUNCTION()
 	virtual void OnRep_DrivenVehicle();
