@@ -245,7 +245,7 @@ bool AUTVehicle::DriverLeave_Implementation(bool bForceLeave)
 	}
 
 	auto OldDriver = Driver;
-	bool bResult = Super::DriverLeave(bForceLeave);
+	bool bResult = Super::DriverLeave_Implementation(bForceLeave);
 
 	if (bResult)
 	{
@@ -561,7 +561,7 @@ bool AUTVehicle::ChangeSeat(AController* ControllerToMove, int32 RequestedSeat)
 		// If we are bumping someone, free their seat.
 		if (BumpController != NULL)
 		{
-			APawn* BumpPawn = Seats[RequestedSeat].StoragePawn;
+			BumpPawn = Seats[RequestedSeat].StoragePawn;
 			if (Seats[RequestedSeat].SeatPawn != NULL)
 			{
 				Seats[RequestedSeat].SeatPawn->DriverLeave(true);
