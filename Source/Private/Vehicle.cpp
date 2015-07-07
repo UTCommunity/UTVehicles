@@ -84,7 +84,7 @@ void AVehicle::DisplayDebug(class UCanvas* Canvas, const FDebugDisplayInfo& Debu
 	else
 	{
 		// TODO: FIXME: CRASH: game crashes on enabled this line
-		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), Driver->GetMesh()->GetName(), Driver->bHidden), 4.0f, YPos);
+		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), *Driver->GetMesh()->GetName(), Driver->bHidden), 4.0f, YPos);
 	}
 	YPos += YL;
 }
@@ -92,6 +92,12 @@ void AVehicle::DisplayDebug(class UCanvas* Canvas, const FDebugDisplayInfo& Debu
 bool AVehicle::CanBeBaseForCharacter(class APawn* APawn) const
 {
 	return true;
+}
+
+/**	Change the Vehicle's base. Note: copied from Character.cpp */
+void AVehicle::SetBase(AActor* NewBase, FVector NewFloor, USkeletalMeshComponent* SkelComp, const FName AttachName)
+{
+	
 }
 
 void AVehicle::SetInputs(float InForward, float InStrafe, float InUp)
@@ -171,7 +177,7 @@ void AVehicle::DetachDriver_Implementation(APawn* P)
 	}
 }
 
-bool AVehicle::CanEnterVehicle(APawn* P)
+bool AVehicle::CanEnterVehicle_Implementation(APawn* P)
 {
 	// SafeGuard checks
 	if (P == NULL || Role != ROLE_Authority || IsPendingKillPending() || Health <= 0)
@@ -585,6 +591,12 @@ float AVehicle::DriverTakeRadialDamage(float Damage, struct FRadialDamageEvent c
 	}
 
 	return 0.f;
+}
+
+AUTInventory* AVehicle::Blueprint_CreateInventory(TSubclassOf<AUTInventory> NewInvClass, bool bAutoActivate)
+{
+	// TODO: Implement
+	return NULL;
 }
 
 // TODO: Check if needed

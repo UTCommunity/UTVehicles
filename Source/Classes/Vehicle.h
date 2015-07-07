@@ -40,15 +40,15 @@ class AVehicle : public APawn //, public IVehicleInterface // Note: Interface on
 
 	/** Positions (relative to vehicle) to try putting the player when exiting.
 	 * Optional: automatic system for determining exitpositions if none is specified. */
-	UPROPERTY(EditAnywhere, Category = Vehicle)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Vehicle)
 	TArray<FVector>	ExitPositions;
 
 	/** Radius for automatic exit positions. */
-	UPROPERTY(BlueprintReadOnly, Category = Vehicle)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Vehicle)
 	float ExitRadius;
 
 	/** Offset from center for Exit test circle. */
-	UPROPERTY(BlueprintReadOnly, Category = Vehicle)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Vehicle)
 	FVector	ExitOffset;
 
 
@@ -100,6 +100,9 @@ public:
 	
 	void SetInputs(float InForward, float InStrafe, float InUp);
 
+	/** Sets the base the Vehicle is driving on */
+	virtual void SetBase(AActor* NewBase, FVector NewFloor = FVector::ZeroVector, USkeletalMeshComponent* SkelComp = NULL, const FName AttachName = NAME_None);
+
 	// ******************************************************************************
 	// Driver attachment, handling, etc.
 
@@ -146,7 +149,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Vehicle)
 	void DetachDriver(APawn* P);
 
-	/** @return returns true if Pawn P is allowed to enter this vehicle */
+	/**
+	* Checks if the given Pawn can enter this vehicle
+	* Network : ALL
+	*
+	* @return returns true if Pawn P is allowed to enter this vehicle
+	*/
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Vehicle)
 	bool CanEnterVehicle(APawn* P);
 
 	// ******************************************************************************
@@ -156,7 +165,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Vehicle)
 	bool TryToDrive(APawn* NewDriver);
 
-	/** @return returns true if a seat is available for a pawn */
+	/** @return returns true if a seat is available for a pawn (Server only) */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Vehicle)
 	bool AnySeatAvailable();
 
@@ -222,6 +231,17 @@ public:
 	// firemodes with input currently being held down (pending or actually firing)
 	UPROPERTY(BlueprintReadOnly, Category = Vehicle)
 	TArray<uint8> PendingFire;
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Vehicle|Inventory", meta = (DisplayName = "CreateInventory", AdvancedDisplay = "bAutoActivate"))
+	virtual AUTInventory* Blueprint_CreateInventory(TSubclassOf<AUTInventory> NewInvClass, bool bAutoActivate = true);
+
+	template<typename InvClass = AUTInventory>
+	inline InvClass* CreateInventory(TSubclassOf<InvClass> NewInvClass, bool bAutoActivate = true)
+	{
+		InvClass* Result = (InvClass*)Blueprint_CreateInventory(NewInvClass, bAutoActivate);
+		checkSlow(Result == NULL || Result->IsA(InvClass::StaticClass()));
+		return Result;
+	}
 
 	/** weapon firing */
 	UFUNCTION(BlueprintCallable, Category = Vehicle)
