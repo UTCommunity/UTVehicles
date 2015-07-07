@@ -18,20 +18,20 @@ void AUTWeaponPawn::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& 
 
 void AUTWeaponPawn::OnRep_VehicleWeapon()
 {
-	UpdateMyVehicleInfo();
+	TryToSetupSeat();
 }
 
 void AUTWeaponPawn::OnRep_Vehicle()
 {
-	UpdateMyVehicleInfo();
+	TryToSetupSeat();
 }
 
 void AUTWeaponPawn::OnRep_SeatIndex()
 {
-	UpdateMyVehicleInfo();
+	TryToSetupSeat();
 }
 
-void AUTWeaponPawn::UpdateMyVehicleInfo()
+void AUTWeaponPawn::TryToSetupSeat()
 {
 	if (MySeatIndex > 0 && MyVehicle != NULL && MySeatIndex < MyVehicle->Seats.Num())
 	{

@@ -38,7 +38,9 @@ class AUTWeaponPawn : public AUTVehicleBase
 	UFUNCTION()
 	virtual void OnRep_SeatIndex();
 
-	void UpdateMyVehicleInfo(); // TODO: rename
+	/** Setup the specific seat given with MySeatIndex on MyVehicle with MyVehicleWeapon if everything is valid */
+	UFUNCTION(BlueprintCallable, Category = Vehicle)
+	void TryToSetupSeat();
 
 };
 
