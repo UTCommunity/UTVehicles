@@ -15,26 +15,11 @@ AVehicle::AVehicle(const FObjectInitializer& ObjectInitializer)
 
 	MomentumMult = 1.0f;
 	bAttachDriver = true;
-
-	Health = 100;
-}
-
-void AVehicle::PreInitializeComponents()
-{
-	// important that this comes before Super so mutators can modify it
-	if (HealthMax == 0)
-	{
-		HealthMax = GetDefault<AVehicle>()->Health;
-	}
-
-	Super::PreInitializeComponents();
 }
 
 void AVehicle::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME_CONDITION(AVehicle, Health, COND_None); // would be nice to bind to teammates and spectators, but that's not an option :(
 
 	DOREPLIFETIME_CONDITION(AVehicle, bDriving, COND_None); // UC: bNetDirty && Role == ROLE_Authority
 	DOREPLIFETIME_CONDITION(AVehicle, Driver, COND_OwnerOnly); // UC: bNetDirty && (bNetOwner || Driver == None || !Driver.bHidden) && Role == ROLE_Authority
@@ -92,12 +77,6 @@ void AVehicle::DisplayDebug(class UCanvas* Canvas, const FDebugDisplayInfo& Debu
 bool AVehicle::CanBeBaseForCharacter(class APawn* APawn) const
 {
 	return true;
-}
-
-/**	Change the Vehicle's base. Note: copied from Character.cpp */
-void AVehicle::SetBase(AActor* NewBase, FVector NewFloor, USkeletalMeshComponent* SkelComp, const FName AttachName)
-{
-	
 }
 
 void AVehicle::SetInputs(float InForward, float InStrafe, float InUp)

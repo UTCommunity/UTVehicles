@@ -6,6 +6,8 @@
 #include "UnrealTournament.h"
 #include "Components/PrimitiveComponent.h"
 
+#include "IBaseChangeInterface.h"
+
 DEFINE_LOG_CATEGORY(UTVehicles);
 
 class FUTVehiclesPlugin : public IModuleInterface
@@ -32,11 +34,8 @@ AActor* Trace(AActor* TraceActor, FVector& HitLocation, FVector& HitNormal, FVec
 	check(TraceActor->GetWorld() != NULL);
 
 	FHitResult HitResult;
-	static FName NAME_UseTrace = FName(TEXT("UseTrace"));
-	FCollisionQueryParams TraceParams(NAME_UseTrace, true);
-
-	// by default the raycasting Actor shouldn't be hit
-	TraceParams.AddIgnoredActor(TraceActor);
+	static FName NAME_Trace = FName(TEXT("Trace"));
+	FCollisionQueryParams TraceParams(NAME_Trace, true, TraceActor);
 
 	// TODO: Implement Sweep trace with Extent
 	bool bHit = TraceActor->GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
@@ -56,7 +55,7 @@ AActor* Trace(FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVecto
 	if (World != NULL)
 	{
 		FHitResult HitResult;
-		static FName NAME_UseTrace = FName(TEXT("UseTrace"));
+		static FName NAME_UseTrace = FName(TEXT("Trace"));
 		FCollisionQueryParams TraceParams(NAME_UseTrace, true);
 
 		// TODO: Implement Sweep trace with Extent
@@ -84,3 +83,12 @@ bool PointCheckComponent(UPrimitiveComponent* InComponent, FVector PointLocation
 	return true;
 }
 
+void ActorSetBase(AActor* ThisActor, AActor* NewBase, FVector NewFloor, USkeletalMeshComponent* SkelComp, const FName AttachName)
+{
+	ThisActor->AttachRootComponentToActor(NewBase, AttachName);
+	
+	if (IBaseChangeInterface* BaseChangeInterface = Cast<IBaseChangeInterface>(NewBase))
+	{
+		BaseChangeInterface->BaseChange();
+	}
+}

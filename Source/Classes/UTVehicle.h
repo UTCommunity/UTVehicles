@@ -10,14 +10,14 @@ struct FVehicleSeat
 {
 	GENERATED_USTRUCT_BODY()
 
-	// ---[ Connections] ----------------c--------
+	// ---[ Connections] ------------------------
 
 	/** Who is sitting in this seat. */
-	UPROPERTY(transient, BlueprintReadOnly)
-	APawn* StoragePawn; // TODO: Add EditInline-equivalent back to property
+	UPROPERTY(transient, BlueprintReadOnly, Category = References)
+	APawn* StoragePawn;
 
 	/** Reference to the WeaponPawn if any */
-	UPROPERTY(transient, BlueprintReadOnly) // TODO: Add EditInline-equivalent back to property
+	UPROPERTY(transient, BlueprintReadOnly, Category = References)
 	AVehicle* SeatPawn;
 
 	// ---[ Weapon ] ------------------------
@@ -27,8 +27,20 @@ struct FVehicleSeat
 	TSubclassOf<AUTVehicleWeapon> GunClass;
 
 	/** Reference to the gun */
-	UPROPERTY(transient, BlueprintReadOnly, Category = Weapon)
+	UPROPERTY(transient, BlueprintReadOnly, Category = Weapon) // TODO: Add EditInline-equivalent back to property
 	AUTVehicleWeapon* Gun;
+
+	// ---[ View Limits ] ----------------------------------
+
+	// NOTE!! If ViewPitchMin/Max are set to 0.0f, the values associated with the host vehicle will be used
+
+	/** Used for setting the ViewPitchMin on the Weapon pawn */
+	UPROPERTY(EditAnywhere, Category = "View Limits")
+	float ViewPitchMin;
+
+	/** Used for setting the ViewPitchMax on the Weapon pawn */
+	UPROPERTY(EditAnywhere, Category = "View Limits")
+	float ViewPitchMax;
 
 	// ---[  Pawn Visibility ] ----------------------------------
 

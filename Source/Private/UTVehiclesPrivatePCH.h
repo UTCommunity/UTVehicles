@@ -41,3 +41,12 @@ extern bool PointCheckComponent
 	FVector PointLocation,
 	FVector PointExtent
 );
+
+extern void ActorSetBase
+(
+	AActor* ThisActor,
+	AActor* NewBase,
+	FVector NewFloor = FVector::ZeroVector, 
+	USkeletalMeshComponent* SkelComp = NULL, 
+	const FName AttachName = NAME_None
+);

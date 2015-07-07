@@ -1,5 +1,6 @@
 #pragma once
 
+#include "VehicleBase.h"
 #include "UTWeapon.h"
 #include "UTCharacter.h"
 #include "Vehicle.generated.h"
@@ -8,12 +9,11 @@
  * Vehicle: The base class of all vehicles.
  */
 UCLASS(Abstract)
-class AVehicle : public APawn //, public IVehicleInterface // Note: Interface only needed for pull request // FIXME: Remove interface
+class AVehicle : public AVehicleBase //, public IVehicleInterface // Note: Interface only needed for pull request // FIXME: Remove interface
 {
 	GENERATED_UCLASS_BODY()
 
 	// Begin AActor Interface.
-	virtual void PreInitializeComponents() override;
 	virtual void DisplayDebug(UCanvas* Canvas, const FDebugDisplayInfo& DebugDisplay, float& YL, float& YPos) override;
 	virtual bool CanBeBaseForCharacter(APawn* APawn) const override;
 	//virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
@@ -22,12 +22,6 @@ class AVehicle : public APawn //, public IVehicleInterface // Note: Interface on
 	virtual void Tick(float DeltaSeconds) override;
 	// End AActor Interface
 
-	/** amount of health this Vehicle has */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Replicated)
-	int32 Health;
-	/** normal maximum health of Vehicle - defaults to Default->Health unless explicitly set otherwise */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Pawn)
-	int32 HealthMax;
 
 	// TODO: originally Driver was a APawn. Allow Driver to be APawn again and set UTDriver?
 	/** Pawn driving this vehicle. */
@@ -50,7 +44,6 @@ class AVehicle : public APawn //, public IVehicleInterface // Note: Interface on
 	/** Offset from center for Exit test circle. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Vehicle)
 	FVector	ExitOffset;
-
 
 private_subobject:
 	/**  The main skeletal mesh associated with this Vehicle */
@@ -99,9 +92,6 @@ public:
 	virtual void SetRiseInput(float InRise) { Rise = InRise; };
 	
 	void SetInputs(float InForward, float InStrafe, float InUp);
-
-	/** Sets the base the Vehicle is driving on */
-	virtual void SetBase(AActor* NewBase, FVector NewFloor = FVector::ZeroVector, USkeletalMeshComponent* SkelComp = NULL, const FName AttachName = NAME_None);
 
 	// ******************************************************************************
 	// Driver attachment, handling, etc.

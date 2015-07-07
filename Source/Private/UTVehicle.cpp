@@ -104,18 +104,8 @@ void AUTVehicle::InitializeSeats()
 
 			Seats[i].SeatPawn = SeatPawn;
 			SeatPawn->SetBase(this);
+			Seats[i].Gun = SeatPawn->CreateInventory<AUTVehicleWeapon>(Seats[i].GunClass);
 
-			AUTVehicleWeapon* Gun = SeatPawn->CreateInventory<AUTVehicleWeapon>(Seats[i].GunClass);
-			if (Gun == NULL)
-			{
-				continue;
-			}
-
-			Seats[i].Gun = Gun;
-
-			// TODO: implement SetBase for UTVehicleWeapon
-			//Gun->SetBase(this);
-	
 			// TODO: Set EyeHeight
 			//Seats[i].SeatPawn->EyeHeight = Seats[i].SeatPawn->BaseEyeHeight;
 
@@ -123,41 +113,16 @@ void AUTVehicle::InitializeSeats()
 			SeatPawn->MyVehicle = this;
 			SeatPawn->MySeatIndex = i;
 
-			// TODO: Implement ViewPitchMin
-	//		if (Seats[i].ViewPitchMin != 0.0f)
-	//		{
-	//			SeatPawn->ViewPitchMin = Seats[i].ViewPitchMin;
-	//		}
-	//		else
-	//		{
-	//			SeatPawn->ViewPitchMin = ViewPitchMin;
-	//		}
-
-			// TODO: Implement ViewPitchMax
-	//		if (Seats[i].ViewPitchMax != 0.0f)
-	//		{
-	//			SeatPawn->ViewPitchMax = Seats[i].ViewPitchMax;
-	//		}
-	//		else
-	//		{
-	//			SeatPawn->ViewPitchMax = ViewPitchMax;
-	//		}
+			// set View pitch min and max
+			SeatPawn->ViewPitchMin = Seats[i].ViewPitchMin != 0.0f ? Seats[i].ViewPitchMin : ViewPitchMin;
+			SeatPawn->ViewPitchMax = Seats[i].ViewPitchMax != 0.0f ? Seats[i].ViewPitchMax : ViewPitchMax;
 		}
 		else
 		{
 			// TODO: Create gun with InventoryManager
 
 			Seats[i].SeatPawn = this;
-			AUTVehicleWeapon* Gun = CreateInventory<AUTVehicleWeapon>(Seats[i].GunClass);
-			if (Gun == NULL)
-			{
-				continue;
-			}
-			
-			Seats[i].Gun = Gun;
-			
-			// TODO: implement SetBase for UTVehicleWeapon
-			//Gun->SetBase(this);
+			Seats[i].Gun = CreateInventory<AUTVehicleWeapon>(Seats[i].GunClass);
 		}
 
 		Seats[i].SeatPawn->DriverDamageMult = Seats[i].DriverDamageMult;
@@ -165,6 +130,7 @@ void AUTVehicle::InitializeSeats()
 
 		if (Seats[i].Gun != NULL)
 		{
+			ActorSetBase(Seats[i].Gun, this);
 			Seats[i].Gun->SeatIndex = i;
 			Seats[i].Gun->MyVehicle = this;
 		}
