@@ -89,6 +89,6 @@ void ActorSetBase(AActor* ThisActor, AActor* NewBase, FVector NewFloor, USkeleta
 	
 	if (IBaseChangeInterface* BaseChangeInterface = Cast<IBaseChangeInterface>(NewBase))
 	{
-		BaseChangeInterface->BaseChange();
+		BaseChangeInterface->Execute_BaseChange(NewBase);
 	}
 }
