@@ -68,8 +68,7 @@ void AVehicle::DisplayDebug(class UCanvas* Canvas, const FDebugDisplayInfo& Debu
 	}
 	else
 	{
-		// TODO: FIXME: CRASH: game crashes on enabled this line
-		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), *Driver->GetMesh()->GetName(), Driver->bHidden), 4.0f, YPos);
+		YL = Canvas->DrawText(RenderFont, FString::Printf(TEXT("Driver Mesh %s hidden %s"), *Driver->GetMesh()->GetName(), Driver->bHidden ? TEXT("true") : TEXT("false")), 4.0f, YPos);
 	}
 	YPos += YL;
 }
@@ -343,8 +342,11 @@ bool AVehicle::DriverLeave_Implementation(bool bForceLeave)
 
 void AVehicle::DriverLeft()
 {
-	Driver = NULL;
-	SetDriving(false);
+	if (Role == ROLE_Authority)
+	{
+		Driver = NULL;
+		SetDriving(false);
+	}
 }
 
 void AVehicle::DriverDied()
