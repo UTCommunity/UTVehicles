@@ -1,6 +1,5 @@
 #include "UTVehiclesPrivatePCH.h"
 #include "UTWeaponPawn.h"
-#include "AAATempUTVehicleWeapon.h"
 #include "UTVehicle.h"
 
 AUTVehicle::AUTVehicle(const FObjectInitializer& ObjectInitializer)

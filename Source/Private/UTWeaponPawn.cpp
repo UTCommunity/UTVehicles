@@ -1,4 +1,5 @@
 #include "UTVehiclesPrivatePCH.h"
+#include "UTVehicle.h"
 #include "UTWeaponPawn.h"
 
 AUTWeaponPawn::AUTWeaponPawn(const FObjectInitializer& ObjectInitializer)
