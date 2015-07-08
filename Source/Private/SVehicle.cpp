@@ -36,12 +36,12 @@ void ASVehicle::PreInitializeComponents()
 
 void ASVehicle::DisplayDebug(UCanvas* Canvas, const FDebugDisplayInfo& DebugDisplay, float& YL, float& YPos)
 {
-	static FName NAME_Vehicle = FName(TEXT("Vehicle"));
-
 	Super::DisplayDebug(Canvas, DebugDisplay, YL, YPos);
 
 #if WITH_VEHICLE
-	if (DebugDisplay.IsDisplayOn(NAME_Vehicle) && GetVehicleMovement() != NULL)
+	static FName NAME_Vehicle_Sim = FName(TEXT("Vehicle_Sim"));
+
+	if (DebugDisplay.IsDisplayOn(NAME_Vehicle_Sim) && GetVehicleMovement() != NULL)
 	{
 		GetVehicleMovement()->DrawDebug(Canvas, YL, YPos);
 		//GetSVehicleDebug(DebugInfo);
