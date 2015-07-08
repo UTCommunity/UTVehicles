@@ -33,12 +33,21 @@ AActor* Trace(AActor* TraceActor, FVector& HitLocation, FVector& HitNormal, FVec
 	check(TraceActor != NULL);
 	check(TraceActor->GetWorld() != NULL);
 
+	bool bHit;
 	FHitResult HitResult;
 	static FName NAME_Trace = FName(TEXT("Trace"));
 	FCollisionQueryParams TraceParams(NAME_Trace, true, TraceActor);
 
-	// TODO: Implement Sweep trace with Extent
-	bool bHit = TraceActor->GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
+	if (Extent.IsZero())
+	{
+		bHit = TraceActor->GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
+	}
+	else
+	{
+		auto shape = FCollisionShape::MakeBox(0.5f*Extent); // recude box by half as extent is generally the full size
+		bHit = TraceActor->GetWorld()->SweepSingleByChannel(HitResult, TraceStart, TraceEnd, FQuat::Identity, COLLISION_TRACE_WEAPON, shape, TraceParams);
+	}
+
 	if (OutHit != NULL)
 	{
 		*OutHit = HitResult;
@@ -58,12 +67,21 @@ AActor* Trace(FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVecto
 	const UWorld* const World = GWorld;
 	if (World != NULL)
 	{
+		bool bHit;
 		FHitResult HitResult;
-		static FName NAME_UseTrace = FName(TEXT("Trace"));
-		FCollisionQueryParams TraceParams(NAME_UseTrace, true);
+		static FName NAME_Trace = FName(TEXT("Trace"));
+		FCollisionQueryParams TraceParams(NAME_Trace, true);
 
-		// TODO: Implement Sweep trace with Extent
-		bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
+		if (Extent.IsZero())
+		{
+			bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
+		}
+		else
+		{
+			auto Collider = FCollisionShape::MakeBox(0.5f*Extent); // recude box by half as extent is generally the full size
+			bHit = World->SweepSingleByChannel(HitResult, TraceStart, TraceEnd, FQuat::Identity, COLLISION_TRACE_WEAPON, Collider, TraceParams);
+		}
+
 		if (OutHit != NULL)
 		{
 			*OutHit = HitResult;
