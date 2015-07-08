@@ -76,6 +76,11 @@ class AUTVehicle : public AUTVehicleBase
 	virtual bool TryToDrive_Implementation(APawn* NewDriver) override;
 	// End AVehicle Interface.
 
+	// Begin AUTVehicleBase Interface.
+	virtual void ServerAdjacentSeat_Implementation(int32 Direction, AController* C) override;
+	virtual void ServerChangeSeat_Implementation(int32 RequestedSeat) override;
+	// End AUTVehicleBase Interface.
+
 
 	/** If true the driver will have the flag attached to its model */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -139,20 +144,6 @@ class AUTVehicle : public AUTVehicleBase
 
 	/** Create all of the vehicle weapons */
 	void InitializeSeats();
-
-	/**
-	* Request change to adjacent vehicle seat
-	*/
-	UFUNCTION(reliable, server, WithValidation)
-	virtual void ServerAdjacentSeat(int32 Direction, AController* C);
-
-	/**
-	* Called when a client is requesting a seat change
-	*
-	* @network	Server-Side
-	*/
-	UFUNCTION(reliable, server, WithValidation)
-	virtual void ServerChangeSeat(int32 RequestedSeat);
 
 	/**
 	* This function looks at 2 controllers and decides if one as priority over the other.  Right now

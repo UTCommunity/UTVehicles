@@ -69,6 +69,28 @@ void AUTPlayerController::UpdateHiddenComponents(const FVector& ViewLocation, TS
 	}
 }
 
+void AUTPlayerController::SwitchWeapon(int32 Group)
+{
+	if (auto Vec = Cast<AUTVehicleBase>(GetPawn()))
+	{
+		Vec->SwitchWeapon(Group); // TODO: FIXME: Maybe change directly to switch seat?
+		return;
+	}
+		
+	Super::SwitchWeapon(Group);
+}
+
+void AUTPlayerController::SwitchWeaponGroup(int32 Group)
+{
+	if (auto Vec = Cast<AUTVehicleBase>(GetPawn()))
+	{
+		Vec->SwitchWeapon(Group); // TODO: FIXME: Maybe change directly to switch seat?
+		return;
+	}
+
+	Super::SwitchWeaponGroup(Group);
+}
+
 void AUTPlayerController::MoveForward(float Value)
 {
 	if (AVehicle* Vehicle = Cast<AVehicle>(GetPawn()))

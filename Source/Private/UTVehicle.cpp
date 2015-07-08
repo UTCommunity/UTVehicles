@@ -453,11 +453,6 @@ bool AUTVehicle::TryToDrive_Implementation(APawn* NewDriver)
 	return Super::TryToDrive_Implementation(NewDriver);
 }
 
-bool AUTVehicle::ServerAdjacentSeat_Validate(int32 Direction, AController* C)
-{
-	return true;
-}
-
 void AUTVehicle::ServerAdjacentSeat_Implementation(int32 Direction, AController* C)
 {
 	int32 CurrentSeat = GetSeatIndexForController(C);
@@ -490,11 +485,6 @@ void AUTVehicle::ServerAdjacentSeat_Implementation(int32 Direction, AController*
 		// change to the seat we found
 		ChangeSeat(C, NewSeat);
 	}
-}
-
-bool AUTVehicle::ServerChangeSeat_Validate(int32 RequestedSeat)
-{
-	return true;
 }
 
 void AUTVehicle::ServerChangeSeat_Implementation(int32 RequestedSeat)
