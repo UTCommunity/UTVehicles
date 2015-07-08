@@ -53,11 +53,10 @@ void AUTVehicle::Destroyed()
 			Seats[i].SeatPawn->Destroy();
 		}
 
-		// TODO: Implement Movement effects
-		/*if (Seats[i].SeatMovementEffect != NULL)
+		if (Seats[i].SeatMovementEffect != NULL)
 		{
 			SetMovementEffect(i, false);
-		}*/
+		}
 	}
 
 	Super::Destroyed();
@@ -170,6 +169,11 @@ void AUTVehicle::SetSeatStoragePawn(int32 SeatIndex, APawn* PawnToSit)
 	{
 		SeatMask = SeatMask ^ Mask;
 	}
+}
+
+void AUTVehicle::SetMovementEffect(int32 SeatIndex, bool bSetActive, AUTCharacter* UTChar)
+{
+	// TODO: Implement movement effects
 }
 
 bool AUTVehicle::DriverEnter_Implementation(APawn* P)
@@ -619,4 +623,68 @@ bool AUTVehicle::ChangeSeat(AController* ControllerToMove, int32 RequestedSeat)
 	}
 
 	return true;
+}
+
+void AUTVehicle::SitDriver(AUTCharacter* UTChar, int32 SeatIndex)
+{
+	// SafeGuard
+	if (UTChar == NULL || !Seats.IsValidIndex(SeatIndex))
+	{
+		return;
+	}
+
+	if (!Seats[SeatIndex].SeatBone.IsNone())
+	{
+		ActorSetBase(UTChar, this, FVector::ZeroVector, GetMesh(), Seats[SeatIndex].SeatBone);
+	}
+	else
+	{
+		ActorSetBase(UTChar, this);
+	}
+	
+	SetMovementEffect(SeatIndex, true, UTChar);
+
+	// TODO: Update physic asset
+	/* UC:
+	// Shut down physics when getting in vehicle.
+	if (UTP.Mesh.PhysicsAssetInstance != None)
+	{
+		UTP.Mesh.PhysicsAssetInstance.SetAllBodiesFixed(TRUE);
+	}
+	UTP.Mesh.bUpdateKinematicBonesFromAnimation = FALSE;
+	UTP.Mesh.PhysicsWeight = 0.0;
+	*/
+
+	if (Seats[SeatIndex].bSeatVisible)
+	{
+		// TODO: FIXME: Set shadow parent and light env
+		/* UC:
+		if ((UTP.Mesh != None) && (Mesh != None))
+		{
+			UTP.Mesh.SetShadowParent(Mesh);
+			UTP.Mesh.SetLightEnvironment(LightEnvironment);
+		}*/
+		
+		//UTChar->SetMeshVisibility(true); // TODO: PR for SetMeshVisibility
+		UTChar->GetMesh()->SetVisibility(true, true); // FIXME: use SetMeshVisibility instead
+
+		UTChar->SetActorRelativeLocation(Seats[SeatIndex].SeatOffset);
+		UTChar->SetActorRelativeRotation(Seats[SeatIndex].SeatRotation);
+		
+		if (UTChar->GetMesh() != NULL)
+		{
+			UTChar->GetMesh()->SetCullDistance(5000.0f); // TODO: parameter / static fields for cull distance
+		}
+
+		// TODO: Hack needed. Legacy code. Remove hack?
+		//HACK - don't let this translation get too large (for Liandri riding high)
+		//float ClampedTranslation = Clamp(UTP.BaseTranslationOffset, -7.0, 7.0);
+		//UTP.Mesh.SetTranslation(vect(0, 0, 1) * ClampedTranslation);
+
+		UTChar->SetActorHiddenInGame(false);
+	}
+	else
+	{
+		UTChar->SetActorHiddenInGame(true);
+	}
 }

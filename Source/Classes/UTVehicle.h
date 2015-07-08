@@ -2,6 +2,7 @@
 
 #include "UTVehicleBase.h"
 #include "UTVehicleWeapon.h"
+#include "VehicleMovementEffect.h"
 #include "UTVehicle.generated.h"
 
 /**	The VehicleSeat struct defines each available seat in the vehicle. */
@@ -20,6 +21,10 @@ struct FVehicleSeat
 	UPROPERTY(transient, BlueprintReadOnly, Category = References)
 	AVehicle* SeatPawn;
 
+	/** Reference to the VehicleMovementEffect if any */
+	UPROPERTY(transient, BlueprintReadOnly, Category = References)
+	AVehicleMovementEffect* SeatMovementEffect;
+
 	// ---[ Weapon ] ------------------------
 
 	/** class of weapon for this seat */
@@ -29,6 +34,12 @@ struct FVehicleSeat
 	/** Reference to the gun */
 	UPROPERTY(transient, BlueprintReadOnly, Category = Weapon) // TODO: Add EditInline-equivalent back to property
 	AUTVehicleWeapon* Gun;
+
+	// ---[ Camera ] ----------------------------------
+
+	/** The Eye Height for Weapon Pawns */
+	UPROPERTY(EditAnywhere, Category = "Camera")
+	float CameraEyeHeight;
 
 	// ---[ View Limits ] ----------------------------------
 
@@ -47,6 +58,18 @@ struct FVehicleSeat
 	/** Is this a visible Seat */
 	UPROPERTY(EditAnywhere, Category = "Pawn Visibility")
 	bool bSeatVisible;
+
+	/** Name of the Bone to use as an anchor for the pawn */
+	UPROPERTY(EditDefaultsOnly, Category = "Pawn Visibility")
+	FName SeatBone;
+
+	///** Offset from the origin to place the based pawn */
+	UPROPERTY(EditDefaultsOnly, Category = "Pawn Visibility")
+	FVector SeatOffset;
+
+	/** Any additional rotation needed when placing the based pawn */
+	UPROPERTY(EditDefaultsOnly, Category = "Pawn Visibility")
+	FRotator SeatRotation;
 
 	// ---[ Misc ] ----------------------------------
 
@@ -110,6 +133,12 @@ class AUTVehicle : public AUTVehicleBase
 	* Vehicle Weapons, Drivers and Passengers
 	*********************************************************************************************/
 
+	/** 
+	* Places the driver character's mesh into the seat position 
+	* NETWORK ALL
+	*/
+	void SitDriver(AUTCharacter* UTChar, int32 SeatIndex);
+
 	/** Player state ofthe  player in passenger turret */
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = Seats)
 	AUTPlayerState* PassengerState;
@@ -169,6 +198,12 @@ class AUTVehicle : public AUTVehicleBase
 	bool ChangeSeat(AController* ControllerToMove, int32 RequestedSeat);
 
 	void SetSeatStoragePawn(int32 SeatIndex, APawn* PawnToSit);
+
+	/** 
+	* Actives/deactivates vehicle effects for the given seat
+	* @network ALL
+	*/
+	void SetMovementEffect(int32 SeatIndex, bool bSetActive, AUTCharacter* UTChar = NULL);
 
 	/**  Checks if passed player is the Driver (server only) 
 	* @return whether the given vehicle pawn is in this vehicle's driver seat

@@ -85,7 +85,7 @@ bool PointCheckComponent(UPrimitiveComponent* InComponent, FVector PointLocation
 
 void ActorSetBase(AActor* ThisActor, AActor* NewBase, FVector NewFloor, USkeletalMeshComponent* SkelComp, const FName AttachName)
 {
-	ThisActor->AttachRootComponentToActor(NewBase, AttachName);
+	ThisActor->AttachRootComponentToActor(NewBase, AttachName, EAttachLocation::SnapToTarget);
 	
 	if (IBaseChangeInterface* BaseChangeInterface = Cast<IBaseChangeInterface>(NewBase))
 	{

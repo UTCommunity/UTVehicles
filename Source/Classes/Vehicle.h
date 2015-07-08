@@ -183,7 +183,7 @@ public:
 	*	Returns true if pawn was successfully placed.
 	*/
 	UFUNCTION(BlueprintCallable, Category = Vehicle)
-	bool PlaceExitingDriver(APawn* ExitingDriver = NULL);
+	virtual bool PlaceExitingDriver(APawn* ExitingDriver = NULL); // TODO: Add BlueprintNativeEvent
 
 	/** Tries to find exit position on either side of vehicle, in back, or in front
 	* @return true if driver successfully exited. 

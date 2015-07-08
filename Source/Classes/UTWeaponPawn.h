@@ -8,6 +8,32 @@ class AUTWeaponPawn : public AUTVehicleBase
 {
 	GENERATED_UCLASS_BODY()
 
+	// Begin AActor Interface.
+	virtual void DisplayDebug(UCanvas* Canvas, const FDebugDisplayInfo& DebugDisplay, float& YL, float& YPos) override;
+	// End AActor Interface
+
+	// Begin APawn Interface.
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void RecalculateBaseEyeHeight() override;
+	// End APawn Interface
+
+	// Begin AVehicleBase Interface.
+	virtual void BaseChange_Implementation() override;
+	virtual void JumpOffPawn() override;
+	// End AVehicleBase Interface
+
+	// Begin AVehicle Interface.
+	virtual void AttachDriver_Implementation(APawn* P) override;
+	virtual bool PlaceExitingDriver(APawn* ExitingDriver = NULL) override;
+	virtual void DriverLeft() override;
+	// End AVehicle Interface
+
+	// Begin AUTVehicleBase Interface.
+	virtual void ServerAdjacentSeat_Implementation(int32 Direction, AController* C) override;
+	virtual void ServerChangeSeat_Implementation(int32 RequestedSeat) override;
+	// End AUTVehicleBase Interface
+
+
 	// Note: Replication events are split for retrieving the event 
 	//       for each single property specifically and being able to override these in subclasses
 
