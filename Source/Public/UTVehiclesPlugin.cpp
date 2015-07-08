@@ -28,7 +28,7 @@ void FUTVehiclesPlugin::ShutdownModule()
 	
 }
 
-AActor* Trace(AActor* TraceActor, FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVector TraceStart, bool bTraceActors, FVector Extent/*, FHitResult& OutHit*/, int ExtraTraceFlags)
+AActor* Trace(AActor* TraceActor, FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVector TraceStart, bool bTraceActors, FVector Extent, FHitResult* OutHit, int ExtraTraceFlags)
 {
 	check(TraceActor != NULL);
 	check(TraceActor->GetWorld() != NULL);
@@ -39,6 +39,10 @@ AActor* Trace(AActor* TraceActor, FVector& HitLocation, FVector& HitNormal, FVec
 
 	// TODO: Implement Sweep trace with Extent
 	bool bHit = TraceActor->GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
+	if (OutHit != NULL)
+	{
+		*OutHit = HitResult;
+	}
 	if (bHit)
 	{
 		HitLocation = HitResult.ImpactPoint;
@@ -49,7 +53,7 @@ AActor* Trace(AActor* TraceActor, FVector& HitLocation, FVector& HitNormal, FVec
 	return NULL;
 }
 
-AActor* Trace(FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVector TraceStart, bool bTraceActors, FVector Extent/*, FHitResult& OutHit*/, int ExtraTraceFlags)
+AActor* Trace(FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVector TraceStart, bool bTraceActors, FVector Extent, FHitResult* OutHit, int ExtraTraceFlags)
 {
 	const UWorld* const World = GWorld;
 	if (World != NULL)
@@ -60,6 +64,10 @@ AActor* Trace(FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVecto
 
 		// TODO: Implement Sweep trace with Extent
 		bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, COLLISION_TRACE_WEAPON, TraceParams);
+		if (OutHit != NULL)
+		{
+			*OutHit = HitResult;
+		}
 		if (bHit)
 		{
 			HitLocation = HitResult.ImpactPoint;

@@ -8,7 +8,6 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(UTVehicles, Log, All);
 
-// TODO: Implement HitResult as optional by-ref parameter
 extern AActor* Trace
 (
 	AActor* TraceActor,
@@ -18,11 +17,10 @@ extern AActor* Trace
 	FVector TraceStart = FVector::ZeroVector,
 	bool bTraceActors = false,
 	FVector Extent = FVector::ZeroVector,
-	//const FHitResult& OutHit = FHitResult(),
+	FHitResult* OutHit = NULL,
 	int ExtraTraceFlags = 0
 );
 
-// TODO: Implement HitResult as optional by-ref parameter
 extern AActor* Trace
 (
 	FVector& HitLocation,
@@ -31,7 +29,7 @@ extern AActor* Trace
 	FVector TraceStart = FVector::ZeroVector,
 	bool bTraceActors = false,
 	FVector Extent = FVector::ZeroVector,
-	//const FHitResult& OutHit = FHitResult(),
+	FHitResult* OutHit = NULL,
 	int ExtraTraceFlags = 0
 );
 
