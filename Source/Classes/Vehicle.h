@@ -45,15 +45,6 @@ class AVehicle : public AVehicleBase //, public IVehicleInterface // Note: Inter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Vehicle)
 	FVector	ExitOffset;
 
-private_subobject:
-	/**  The main skeletal mesh associated with this Vehicle */
-	UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class USkeletalMeshComponent* Mesh;
-
-public:
-
-	/** Returns Mesh subobject **/
-	USkeletalMeshComponent* GetMesh() const { return Mesh; };
 
 protected:
 

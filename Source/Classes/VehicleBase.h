@@ -14,6 +14,17 @@ class AVehicleBase : public APawn, public IBaseChangeInterface
 	virtual void PreInitializeComponents() override;
 	// End AActor Interface
 
+private_subobject:
+
+	/**  The main skeletal mesh associated with this Vehicle */
+	UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* Mesh;
+
+public:
+
+	/** Returns Mesh subobject **/
+	USkeletalMeshComponent* GetMesh() const { return Mesh; };
+
 	/** amount of health this Vehicle has */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Replicated)
 	int32 Health;
