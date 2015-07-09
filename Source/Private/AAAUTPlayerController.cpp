@@ -53,6 +53,46 @@ void AUTPlayerController::ServerSuicide_Implementation()
 	}
 }
 
+void AUTPlayerController::BehindView(bool bWantBehindView)
+{
+	Super::BehindView(bWantBehindView);
+	
+	// make sure we recalculate camera position for this frame
+	if (PlayerCameraManager != NULL)
+	{
+		PlayerCameraManager->LastFrameCameraCache.TimeStamp = GetWorld()->GetTimeSeconds() - 1.0;
+	}
+}
+
+void AUTPlayerController::GetPlayerViewPoint(FVector& out_Location, FRotator& out_Rotation) const
+{
+	AVehicle* Vehicle = Cast<AVehicle>(GetPawn());
+	
+	if (IsLocalController() && Vehicle != NULL)
+	{
+		float DeltaTime = 0;
+		
+		FMinimalViewInfo OutResult;
+		OutResult.Location = out_Location;
+		OutResult.Rotation = out_Rotation;
+
+		if (PlayerCameraManager != NULL)
+		{
+			DeltaTime = GetWorld()->GetTimeSeconds() - PlayerCameraManager->LastFrameCameraCache.TimeStamp;
+			PlayerCameraManager->FillCameraCache(OutResult);
+		}
+
+		Vehicle->CalcCamera(DeltaTime, OutResult);
+
+		out_Location = OutResult.Location;
+		out_Rotation = OutResult.Rotation;
+	}
+	else
+	{
+		Super::GetPlayerViewPoint(out_Location, out_Rotation);
+	}
+}
+
 void AUTPlayerController::UpdateHiddenComponents(const FVector& ViewLocation, TSet<FPrimitiveComponentId>& HiddenComponents)
 {
 	Super::UpdateHiddenComponents(ViewLocation, HiddenComponents);

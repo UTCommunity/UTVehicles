@@ -2,6 +2,8 @@
 #include "UTWeaponPawn.h"
 #include "UTVehicle.h"
 
+// TODO: Use PlayerCameraManager for proper vehicle view calculation
+
 AUTVehicle::AUTVehicle(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
@@ -11,6 +13,14 @@ AUTVehicle::AUTVehicle(const FObjectInitializer& ObjectInitializer)
 
 	bCanCarryFlag = false;
 	bDriverHoldsFlag = false;
+
+	SeatCameraScale = 1.0f;
+
+	bNoZSmoothing = true;
+	bLimitCameraZLookingUp = false;
+	bNoFollowJumpZ = false;
+	CameraSmoothingFactor = 2.0f;
+	CameraLag = 0.12f;
 }
 
 void AUTVehicle::BeginPlay()
@@ -76,7 +86,8 @@ void AUTVehicle::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME(AUTVehicle, PassengerState);
-	DOREPLIFETIME(AUTVehicle, SeatMask)
+	DOREPLIFETIME(AUTVehicle, SeatMask);
+	DOREPLIFETIME(AUTVehicle, bDeadVehicle);
 }
 
 void AUTVehicle::InitializeSeats()
@@ -173,6 +184,36 @@ void AUTVehicle::SetSeatStoragePawn(int32 SeatIndex, APawn* PawnToSit)
 void AUTVehicle::SetMovementEffect(int32 SeatIndex, bool bSetActive, AUTCharacter* UTChar)
 {
 	// TODO: Implement movement effects
+}
+
+void AUTVehicle::AttachDriver_Implementation(APawn* P)
+{
+	// reset vehicle camera
+	OldPositions.Empty();
+	
+	// TODO: Check Eyeheight
+	//Eyeheight = BaseEyeheight;
+
+	AUTCharacter* UTChar = Cast<AUTCharacter>(P);
+	if (UTChar != NULL)
+	{
+		//UTChar.SetWeaponAttachmentVisibility(false); // TODO: FIXME: Weapon attachement visibility // TODO: PR for SetWeaponAttachmentVisibility
+		//UTChar.SetHandIKEnabled(false); // TODO: FIXME: Implement SetHandIKEnabled
+
+		if (bAttachDriver)
+		{
+			//UTChar.SetCollision(false, false);
+			//UTChar.bCollideWorld = false;
+			UTChar->SetActorEnableCollision(false); // FIXME: Check if no-collision is properly set
+
+			ActorSetBase(UTChar, NULL);
+			//UTP.SetHardAttach(true);// TODO: FIXME: add hard attach
+			UTChar->SetActorLocation(GetActorLocation());
+			//UTChar->SetPhysics(PHYS_None); // TODO: FIXME: Set Physics state
+
+			SitDriver(UTChar, 0);
+		}
+	}
 }
 
 bool AUTVehicle::DriverEnter_Implementation(APawn* P)
@@ -390,7 +431,6 @@ APlayerState* AUTVehicle::GetSeatPlayerState(int32 SeatNum)
 	if (Role != ROLE_Authority)
 	{
 		return (SeatNum == 0) ? PlayerState : PassengerState;
-		
 	}
 	else if (Seats.IsValidIndex(SeatNum) && Seats[SeatNum].SeatPawn != NULL)
 	{
@@ -685,5 +725,357 @@ void AUTVehicle::SitDriver(AUTCharacter* UTChar, int32 SeatIndex)
 	else
 	{
 		UTChar->SetActorHiddenInGame(true);
+	}
+}
+
+void AUTVehicle::OnRep_VehicleDied()
+{
+	// TODO: Handle bDeadVehicle replication
+}
+
+FVector AUTVehicle::GetCameraFocus(int SeatIndex)
+{
+	// SafeGuard // TODO: maybe return cached camera focus value
+	if (!Seats.IsValidIndex(SeatIndex))
+	{
+		return FVector(0.0f);
+	}
+
+	FVector CamStart;
+
+	//  calculate camera focus
+	if (!bDeadVehicle && !Seats[SeatIndex].CameraTag.IsNone())
+	{
+		CamStart = Mesh->GetSocketLocation(Seats[SeatIndex].CameraTag);
+
+		// Do a line check from actor location to this socket. If we hit the world, use that location instead.
+		FVector HitLocation;
+		FVector HitNormal;
+		auto HitActor = Trace(HitLocation, HitNormal, CamStart, GetActorLocation(), false, FVector(12.0f));
+		if (HitActor != NULL)
+		{
+			CamStart = HitLocation;
+		}
+	}
+	else
+	{
+		CamStart = GetActorLocation();
+	}
+
+	CamStart += GetActorRotation().RotateVector(Seats[SeatIndex].CameraBaseOffset);
+
+	//DrawDebugSphere(CamStart, 8, 10, 0, 255, 0, FALSE);
+	//DrawDebugSphere(Location, 8, 10, 255, 255, 0, FALSE);
+	
+	return CamStart;
+}
+
+FVector AUTVehicle::GetCameraStart(int32 SeatIndex)
+{
+	// If we've already updated the cameraoffset, just return it
+	int32 len = OldPositions.Num();
+	if (len > 0 && SeatIndex == 0 && OldPositions[len - 1].Time == GetWorld()->GetTimeSeconds())
+	{
+		return CameraOffset + GetActorLocation();
+	}
+
+	FVector CamStart = GetCameraFocus(SeatIndex);
+	float OriginalCamZ = CamStart.Z;
+	if (CameraLag == 0 || SeatIndex != 0 || !IsControlled())
+	{
+		return CamStart;
+	}
+
+	// cache our current location
+	FTimePosition NewPos, PrevPos;
+	NewPos.Time = GetWorld()->GetTimeSeconds();
+	NewPos.Position = CamStart;
+	OldPositions.Add(NewPos);
+
+	//// if no old locations saved, return offset
+	if (len == 0)
+	{
+		CameraOffset = CamStart - GetActorLocation();
+		return CamStart;
+	}
+
+	float DeltaTime = (len > 1) ? (GetWorld()->GetTimeSeconds() - OldPositions[len - 2].Time) : 0.0;
+
+	len = OldPositions.Num();
+	int32 ObsoleteCount = 0;
+	for (int32 i = 0; i<len; i++)
+	{
+		if (OldPositions[i].Time < GetWorld()->GetTimeSeconds() - CameraLag)
+		{
+			PrevPos = OldPositions[i];
+			ObsoleteCount++;
+		}
+		else
+		{
+			if (ObsoleteCount > 0)
+			{
+				// linear interpolation to maintain same distance in past
+				if ((i == 0) || (OldPositions[i].Time - PrevPos.Time > 0.2))
+				{
+					CamStart = OldPositions[i].Position;
+				}
+				else
+				{
+					CamStart = PrevPos.Position + (OldPositions[i].Position - PrevPos.Position)*(GetWorld()->GetTimeSeconds() - CameraLag - PrevPos.Time) / (OldPositions[i].Time - PrevPos.Time);
+				}
+				if (ObsoleteCount > 1)
+				{
+					OldPositions.RemoveAt(0, ObsoleteCount - 1);
+				}
+			}
+			else
+			{
+				CamStart = OldPositions[i].Position;
+			}
+
+			// need to smooth camera to vehicle distance, since vehicle update rate not synched with frame rate
+			if (DeltaTime > 0)
+			{
+				DeltaTime *= CameraSmoothingFactor;
+				CameraOffset = (CamStart - GetActorLocation())*DeltaTime + CameraOffset*(1 - DeltaTime);
+				if (bNoZSmoothing)
+				{
+					// don't smooth z - want it bouncy
+					CameraOffset.Z = CamStart.Z - GetActorLocation().Z;
+				}
+			}
+			else
+			{
+				CameraOffset = CamStart - GetActorLocation();
+			}
+
+			CamStart = CameraOffset + GetActorLocation();
+			if (bLimitCameraZLookingUp)
+			{
+				CamStart.Z = LimitCameraZ(CamStart.Z, OriginalCamZ, SeatIndex);
+			}
+			return CamStart;
+		}
+	}
+
+	CamStart = OldPositions[len - 1].Position;
+	if (bLimitCameraZLookingUp)
+	{
+		CamStart.Z = LimitCameraZ(CamStart.Z, OriginalCamZ, SeatIndex);
+	}
+
+	return CamStart;
+}
+
+float AUTVehicle::LimitCameraZ(float CurrentCamZ, float OriginalCamZ, int32 SeatIndex)
+{
+	if (Seats.IsValidIndex(SeatIndex))
+	{
+		FRotator CamRot = Seats[SeatIndex].SeatPawn->GetViewRotation();
+		CamRot.Pitch = FRotator::ClampAxis(CamRot.Pitch);
+		if ((CamRot.Pitch < 32768.0f))
+		{
+			float Pct = FMath::Clamp<float>(CamRot.Pitch*0.00025f, 0.0f, 1.0f);
+			CurrentCamZ = OriginalCamZ*Pct + CurrentCamZ*(1.0 - Pct);
+		}
+	}
+
+	return CurrentCamZ;
+}
+
+void AUTVehicle::CalcCamera(float DeltaTime, struct FMinimalViewInfo& OutResult)
+{
+	VehicleCalcCamera(DeltaTime, 0, OutResult);
+}
+
+void AUTVehicle::VehicleCalcCamera(float DeltaTime, int32 SeatIndex, struct FMinimalViewInfo& OutResult, bool bPivotOnly)
+{
+	// TODO: Implement forcing mesh to be visible // TODO: Check if this is needed as we apply visibiltiy elsewhere in UpdateHiddenComponents
+	/* UC
+	Mesh.SetOwnerNoSee(false);
+	if ((UTPawn(Driver) != None) && !Driver.bHidden && Driver.Mesh.bOwnerNoSee)
+	{
+		UTPawn(Driver).SetMeshVisibility(true);
+	}
+	*/
+
+	// SafeGuard
+	if (!Seats.IsValidIndex(SeatIndex) || Seats[SeatIndex].SeatPawn == NULL)
+	{
+		return;
+	}
+
+	// TODO: Implement fixed view
+	/*
+	// Handle the fixed view
+	AUTCharacter* UTChar = Cast<AUTCharacter>(Seats[SeatIndex].SeatPawn->Driver);
+	if (UTChar != NULL && UTChar->bFixedView)
+	{
+		OutResult.Location = UTChar->FixedViewLoc;
+		OutResult.Rotation = UTChar->FixedViewRot;
+		return;
+	}*/
+
+	FVector CamStart = GetCameraStart(SeatIndex);
+	
+	// Get the rotation
+	if ((Seats[SeatIndex].SeatPawn->Controller != NULL) && !bSpectatedView)
+	{
+		OutResult.Rotation = Seats[SeatIndex].SeatPawn->GetViewRotation();
+	}
+
+	// TODO: Support debug free cam
+	/*
+	// support debug 3rd person cam
+	if (P != None)
+	{
+		P.ModifyRotForDebugFreeCam(out_CamRot);
+	}*/
+
+	FRotationMatrix CamMat(OutResult.Rotation);
+	FVector CamRotX, CamRotY, CamRotZ;
+	CamMat.GetScaledAxes(CamRotX, CamRotY, CamRotZ);
+	// TODO: Use Eyeheight instead of BaseEyeHeight
+	CamStart += (Seats[SeatIndex].SeatPawn->BaseEyeHeight + LookForwardDist * FMath::Max<float>(0.0, (1.0 - CamRotZ.Z)))* CamRotZ;
+
+	// if bNoFollowJumpZ, Z component of Camera position is fixed during a jump
+	if (bNoFollowJumpZ)
+	{
+		float NewCamStartZ = CamStart.Z;
+		if ((GetVelocity().Z > 0) && !HasWheelsOnGround() && (OldCamPosZ != 0))
+		{
+			// upward part of jump. Fix camera Z position.
+			bFixedCamZ = true;
+			if (OldPositions.Num() > 0)
+			{
+				OldPositions.Last().Position.Z += (OldCamPosZ - CamStart.Z);
+			}
+			CamStart.Z = OldCamPosZ;
+			if (NewCamStartZ - CamStart.Z > 64)
+			{
+				CamStart.Z = NewCamStartZ - 64;
+			}
+		}
+		else if (bFixedCamZ)
+		{
+			// Camera z position is being fixed, now descending
+			if (HasWheelsOnGround() || (CamStart.Z <= OldCamPosZ))
+			{
+				// jump has ended
+				if (DeltaTime >= 0.1f)
+				{
+					// all done
+					bFixedCamZ = false;
+				}
+				else
+				{
+					// Smoothly return to normal camera mode.
+					CamStart.Z = 10 * DeltaTime*CamStart.Z + (1 - 10 * DeltaTime)*OldCamPosZ;
+					if (abs(NewCamStartZ - CamStart.Z) < 1.f)
+					{
+						bFixedCamZ = false;
+					}
+				}
+			}
+			else
+			{
+				// descending from jump, still in the air, so fix camera Z position
+				if (OldPositions.Num() > 0)
+				{
+					OldPositions.Last().Position.Z += (OldCamPosZ - CamStart.Z);
+				}
+				CamStart.Z = OldCamPosZ;
+			}
+		}
+	}
+
+	// Trace up to the view point to make sure it's not obstructed.
+	FVector SafeLocation;
+	if (Seats[SeatIndex].CameraSafeOffset == FVector::ZeroVector)
+	{
+		SafeLocation = GetActorLocation();
+	}
+	else
+	{
+		FRotationMatrix Mat(GetActorRotation());
+		FVector X, Y, Z;
+		Mat.GetScaledAxes(X, Y, Z);
+		SafeLocation = GetActorLocation() + Seats[SeatIndex].CameraSafeOffset.X * X + Seats[SeatIndex].CameraSafeOffset.Y * Y + Seats[SeatIndex].CameraSafeOffset.Z * Z;
+	}
+
+	// DrawDebugSphere(SafeLocation, 16, 10, 255, 0, 255, FALSE);
+	// DrawDebugSphere(CamStart, 16, 10, 255, 255, 0, FALSE);
+
+	bool bObstructed = false;
+	FVector HitLocation, HitNormal;
+	AActor* HitActor = Trace(HitLocation, HitNormal, CamStart, SafeLocation, false, FVector(12.0f));
+	if (HitActor != NULL)
+	{
+		bObstructed = true;
+		CamStart = HitLocation;
+	}
+
+	OldCamPosZ = CamStart.Z;
+	if (bPivotOnly)
+	{
+		OutResult.Location = CamStart;
+		return;
+	}
+
+	// Calculate the optimal camera position
+	FVector CamDir = CamRotX * Seats[SeatIndex].CameraOffset * SeatCameraScale;
+
+	// keep camera from going below vehicle
+	if (!bRotateCameraUnderVehicle && (CamDir.Z < 0))
+	{
+		CamDir *= (CamDir.Size() - FMath::Abs(CamDir.Z)) / (CamDir.Size() + FMath::Abs(CamDir.Z));
+	}
+
+	FVector CamPos = CamStart + CamDir;
+
+	// Adjust for obstructions
+	HitActor = Trace(HitLocation, HitNormal, CamPos, CamStart, false, FVector(12.0f));
+	if (HitActor != NULL)
+	{
+		OutResult.Location = HitLocation;
+		bObstructed = true;
+	}
+	else
+	{
+		OutResult.Location = CamPos;
+	}
+
+	// TODO: Replace Mesh with proper CollisionComponent in TraceComponent
+	bool bInsideVehicle = false;
+	FVector FirstHitLocation;
+	if (!bRotateCameraUnderVehicle && (CamDir.Z < 0) && TraceComponent(FirstHitLocation, HitNormal, Mesh, OutResult.Location, CamStart, FVector(0.f)))
+	{
+		// going through vehicle - it's ok if outside collision on other side
+		if (!TraceComponent(HitLocation, HitNormal, Mesh, CamStart, OutResult.Location, FVector(0.0f)))
+		{
+			// end point is inside collision - that's bad
+			OutResult.Location = FirstHitLocation;
+			bObstructed = true;
+			bInsideVehicle = true;
+		}
+	}
+
+	// if trace doesn't hit collisioncomponent going back in, it means we are inside the collision box
+	// in which case we want to hide the vehicle
+	if (!bCameraNeverHidesVehicle && bObstructed)
+	{
+		bInsideVehicle = bInsideVehicle
+			|| !TraceComponent(HitLocation, HitNormal, Mesh, SafeLocation, OutResult.Location, FVector(0.0f))
+			|| ((HitLocation - OutResult.Location).SizeSquared() < MinCameraDistSq);
+
+		// TODO: Implement forcing mesh to be visible // TODO: Check if this is needed as we apply visibility elsewhere in UpdateHiddenComponents
+		/* UC
+		Mesh.SetOwnerNoSee(bInsideVehicle);
+		if ((UTPawn(Driver) != None) && !Driver.bHidden && (Driver.Mesh.bOwnerNoSee != Mesh.bOwnerNoSee))
+		{
+			// Handle the main player mesh
+			Driver.Mesh.SetOwnerNoSee(Mesh.bOwnerNoSee);
+		}
+		*/
 	}
 }

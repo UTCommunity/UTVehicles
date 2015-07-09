@@ -11,6 +11,11 @@ class AAAAUTPlayerController : public AUTPlayerController
 
 	// Temp
 	// Begin AUTPlayerController Interface.
+	virtual void GetPlayerViewPoint(FVector& Location, FRotator& Rotation) const override;
+	// End AUTPlayerController Interface.
+
+	// Temp
+	// Begin AUTPlayerController Interface.
 	virtual void InitInputSystem() override;
 	virtual void SetupInputComponent() override;
 	virtual void ServerSuicide_Implementation() override;
@@ -18,6 +23,8 @@ class AAAAUTPlayerController : public AUTPlayerController
 	
 	virtual void SwitchWeapon(int32 Group) override;
 	virtual void SwitchWeaponGroup(int32 Group) override;
+
+	virtual void BehindView(bool bWantBehindView) override;
 	// End AUTPlayerController Interface.
 
 	/** Getter for Vehicle */
