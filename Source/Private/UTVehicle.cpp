@@ -751,7 +751,7 @@ FVector AUTVehicle::GetCameraFocus(int SeatIndex)
 		// Do a line check from actor location to this socket. If we hit the world, use that location instead.
 		FVector HitLocation;
 		FVector HitNormal;
-		auto HitActor = Trace(HitLocation, HitNormal, CamStart, GetActorLocation(), false, FVector(12.0f));
+		auto HitActor = Trace(this, HitLocation, HitNormal, CamStart, GetActorLocation(), false, FVector(12.0f));
 		if (HitActor != NULL)
 		{
 			CamStart = HitLocation;
@@ -1008,7 +1008,7 @@ void AUTVehicle::VehicleCalcCamera(float DeltaTime, int32 SeatIndex, struct FMin
 
 	bool bObstructed = false;
 	FVector HitLocation, HitNormal;
-	AActor* HitActor = Trace(HitLocation, HitNormal, CamStart, SafeLocation, false, FVector(12.0f));
+	AActor* HitActor = Trace(this, HitLocation, HitNormal, CamStart, SafeLocation, false, FVector(12.0f));
 	if (HitActor != NULL)
 	{
 		bObstructed = true;
@@ -1034,7 +1034,7 @@ void AUTVehicle::VehicleCalcCamera(float DeltaTime, int32 SeatIndex, struct FMin
 	FVector CamPos = CamStart + CamDir;
 
 	// Adjust for obstructions
-	HitActor = Trace(HitLocation, HitNormal, CamPos, CamStart, false, FVector(12.0f));
+	HitActor = Trace(this, HitLocation, HitNormal, CamPos, CamStart, false, FVector(12.0f));
 	if (HitActor != NULL)
 	{
 		OutResult.Location = HitLocation;
