@@ -517,7 +517,7 @@ namespace UTVehicles.Automation
 			if (PreReleaseString.Length > 0)
 			{
 				PreRelease = "-" + PreReleaseString;
-				if (!HasParam("release))
+				if (!HasParam("release"))
 				{
 					if (BuildMeta.BuildNumber > 0) PreRelease += "." + (BuildVersion.BuildAsNumber + 1);
 					PreRelease += "-" + BuildMeta.Build;
