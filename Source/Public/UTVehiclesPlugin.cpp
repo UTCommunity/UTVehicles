@@ -97,6 +97,24 @@ AActor* Trace(FVector& HitLocation, FVector& HitNormal, FVector TraceEnd, FVecto
 	return NULL;
 }
 
+bool TraceComponent(FVector& HitLocation, FVector& HitNormal, UPrimitiveComponent* InComponent, FVector TraceEnd, FVector TraceStart, FVector Extent, FHitResult* OutHitInfo)
+{
+	check(InComponent != NULL);
+	check(InComponent->IsValidLowLevel() != NULL);
+
+	FHitResult HitResult;
+	static FName NAME_Trace = FName(TEXT("Trace"));
+	FCollisionQueryParams TraceParams(NAME_Trace, true);
+
+	bool bHit = InComponent->LineTraceComponent(HitResult, TraceStart, TraceEnd, TraceParams);
+	if (OutHitInfo != NULL)
+	{
+		*OutHitInfo = HitResult;
+	}
+
+	return bHit;
+}
+
 bool PointCheckComponent(UPrimitiveComponent* InComponent, FVector PointLocation, FVector PointExtent)
 {
 	FHitResult HitResult;
