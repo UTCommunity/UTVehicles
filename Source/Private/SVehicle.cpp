@@ -60,3 +60,21 @@ void ASVehicle::Tick(float DeltaSeconds)
 		//SimObj->SetRiseInput(Rise);
 	}
 }
+
+// FIXME: Improve Wheels-on-ground check
+bool ASVehicle::HasWheelsOnGround()
+{
+	if (SimObj != NULL)
+	{
+		for (auto Wheel : SimObj->Wheels)
+		{
+			auto Surface = Wheel->GetContactSurfaceMaterial();
+			if (Surface != NULL && Surface->Friction > 0.f)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

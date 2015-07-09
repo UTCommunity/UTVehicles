@@ -45,4 +45,12 @@ public:
 	//USVehicleSimBase* GetVehicleMovement() const { return SimObj; };
 	UWheeledVehicleMovementComponent* GetVehicleMovement() const { return SimObj; };
 
+public:
+
+	/** 
+	* Returns true if any of vehicles wheels are currently in contact with the ground (wheel has bWheelOnGround==true)
+	* @NETWORK ALL
+	*/
+	bool HasWheelsOnGround();
+
 };
