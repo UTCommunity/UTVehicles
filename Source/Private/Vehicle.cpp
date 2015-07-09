@@ -576,7 +576,12 @@ float AVehicle::DriverTakeRadialDamage(float Damage, struct FRadialDamageEvent c
 
 AUTInventory* AVehicle::Blueprint_CreateInventory(TSubclassOf<AUTInventory> NewInvClass, bool bAutoActivate)
 {
-	// TODO: Implement
+	// TODO: Implement properly if Inventory Manager exists
+	if (NewInvClass != NULL)
+	{
+		return GetWorld()->SpawnActor<AUTInventory>(NewInvClass);
+	}
+
 	return NULL;
 }
 
