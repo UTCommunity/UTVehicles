@@ -21,15 +21,8 @@ class AAAAUTCharacter : public AUTCharacter
 	UPROPERTY(EditAnywhere)
 	float VehicleCheckRadius;
 
-	// TODO: Implement once methods are virtual
-	//void StartDriving(APawn* Vehicle) override;
-	//void StopDriving(APawn* Vehicle) override;
-
-	// TODO: Remove once StartDriving and StopDriving are virtual
-	void StartDriving_WORKAROUND(APawn* Vehicle);
-	void StopDriving_WORKAROUND(APawn* Vehicle);
-	APawn* OldDrivenVehicle;
-	bool bDrivenVehicleStored;
+	virtual void StartDriving(APawn* Vehicle) override;
+	virtual void StopDriving(APawn* Vehicle) override;
 
 	// Note: Insert after ServerUseCarriedObject()
 	// ...
